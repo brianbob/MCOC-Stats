@@ -1,0 +1,10 @@
+.mcoc-avg-table,
+.mcoc-misses-table {
+  width: 44%;
+  display: inline-block;
+  margin-right: 5%;
+}
+
+.mcoc-point-chart {
+  height: 400px;
+}

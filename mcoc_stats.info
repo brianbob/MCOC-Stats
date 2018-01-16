@@ -1,0 +1,11 @@
+name = MCOC Stats
+description = Provides various stats for Marvel Contest of Champions.
+core = 7.x
+package = mcoc
+
+dependencies[] = views
+
+files[] = js/mcoc_stats.aq.js
+files[] = js/mcoc_stats.aq.js
+files[] = css/mcoc_stats.aq.css
+files[] = css/mcoc_stats.aq.css

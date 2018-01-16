@@ -1,0 +1,180 @@
+<?php
+
+/**
+ * Implements hook_menu.
+ */
+function mcoc_stats_menu() {
+  $items['mcoc/stats/aq'] = array(
+    'title' => 'BG2 AQ Stats', 
+    'description' => 'Alliance quest stats',
+    'page callback' => 'drupal_get_form', 
+    'page arguments' => array('mcoc_stats_aq'),
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Page callback for the AQ stats page. 
+ */
+function mcoc_stats_aq ($form, &$form_state) {
+  // Variables!
+  $rows = array();
+  $user_data = array();
+  $points_array = array();
+  $rounds_array = array();
+  $misses_array = array();
+  $users_array = array();
+  $aq_array = array();
+
+  // Attach our CSS
+  $form['#attached']['css'] = array(drupal_get_path('module', 'mcoc_stats') . '/css/mcoc_stats.aq.css');
+  // Attach our JS
+  $form['#attached']['js'][] = drupal_get_path('module', 'mcoc_stats') . '/js/jquery.canvasjs.min.js';
+  $form['#attached']['js'][] = drupal_get_path('module', 'mcoc_stats') . '/js/mcoc_stats.aq.js';
+
+  
+
+  // Get all our individual aq records. 
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'individual_aq_record');
+  $records = $query->execute();
+  // Iterate over the records.
+  foreach ($records['node'] as $record) {
+    // Load the node and wrap it.
+    $node_entity = node_load($record->nid);
+    $node_wrapper = entity_metadata_wrapper('node', $node_entity);
+    $group_id = $node_wrapper->field_aq_record->value()->nid;
+    // Load the user associated with the record so we can get their name.
+    $user = $node_wrapper->field_member->value();
+    // Get their points so we can average them. 
+    $points = $node_wrapper->field_points->value();
+    // Check to see if we've added this user yet (to avoid php warnings about unknown indexes).
+    if (!isset($points_array[$user->uid]) ) {
+      $points_array[$user->uid] = 0;
+      $misses_array[$user->uid] = 0;
+      $rounds_array[$user->uid] = 0;
+      $users_array[$user->uid] = $user->name;
+    } 
+    // Check to see if we've used this record before.
+    if (!isset($aq_array[$group_id])) {
+      $aq_array[$group_id] = 0;      
+    }
+
+    // Add the points to the member's personal total and the group total.
+    $points_array[$user->uid] += $points;
+    $aq_array[$group_id] += $points;    
+    // Record that this user participated this round. 
+    $rounds_array[$user->uid]++;
+    // Check to see if his points are zero, meaning this person missed the round.
+    if ($points == 0) {
+      $misses_array[$user->uid]++;
+    }
+  }
+  // Create our charts.
+  mcoc_stats_create_points_chart($form, $aq_array);
+  // Create our tables. 
+  mcoc_stats_create_avg_table($form, $users_array, $points_array, $rounds_array);
+  mcoc_stats_create_misses_table($form, $users_array, $misses_array);
+
+  return $form;
+}
+
+/**
+ * Creates the 'Average points' table. 
+ */
+function mcoc_stats_create_avg_table(&$form, $users, $points, $rounds) {
+  // Sort our array based on the results.
+  $i = 0;
+  arsort($points);
+  $header = array('#', 'Name', 'Average Points');
+  $rows = array();
+  // Calculate our stats and create the table
+  foreach($points as $id => $score) {
+    $i++;
+    $average = $score / $rounds[$id];
+    $rows[] = array(
+      array('data' => $i, 'align' => 'center'),
+      array('data' => $users[$id], 'align' => 'center'),
+      array('data' => number_format($average, 0), 'align' => 'center'),
+    );
+  }
+
+  $form['avg'] = array (
+    //'#markup' => '<pre>' . print_r($user_data, TRUE) . '</pre>',
+    '#prefix' => '<div class="mcoc-avg-table">',
+    '#markup' => theme('table', array('header' => $header, 'rows' => $rows)),
+    '#suffix' =>'</div>'
+  );
+}
+
+/**
+ * Creates the 'Misses' table. 
+ */
+function mcoc_stats_create_misses_table(&$form, $users, $misses) {
+  // Sort our array based on the results.
+  $i = 0;
+  arsort($misses);
+  $header = array('#', 'Name', '# of Missed AQs');
+  $rows = array();
+  // Calculate our stats and create the table
+  foreach($misses as $id => $miss) {
+    $i++;
+    $rows[] = array(
+      array('data' => $i, 'align' => 'center'),
+      array('data' => $users[$id], 'align' => 'center'),
+      array('data' => $miss, 'align' => 'center'),
+    );
+  }
+
+  $form['misses'] = array (
+    '#prefix' => '<div class="mcoc-misses-table">',
+    '#markup' => theme('table', array('header' => $header, 'rows' => $rows)),
+    '#suffix' =>'</div>'
+  );
+}
+
+function mcoc_stats_create_points_chart(&$form, $aq_array) {
+  $values = array();
+
+  foreach($aq_array as $aq_id => $aq_points) {
+    $node_entity = node_load($aq_id);
+    $node_wrapper = entity_metadata_wrapper('node', $node_entity);
+    $date_array = $node_wrapper->field_date_range->value();
+    $date_parts = explode( ' ', $date_array['value']);
+    $timestamp = strtotime($date_parts[0]) * 1000;
+  
+    $values[] = array(
+      'x' => $timestamp,
+      'y' => $aq_points,
+    );
+    
+    /*
+        $test_vals = array (
+      array(
+        'x' => 7,
+        'y' => 8
+      ),
+      array(
+        'x' => 8,
+        'y' => 9
+      ),
+      array(
+        'x' => 9,
+        'y' => 10
+      )
+    );
+    */
+  }
+  // Create our chart
+  drupal_add_js(array('mcoc_stats' => array('data' => $values)), array('type' => 'setting'));
+
+  $form['points-chart'] = array (
+    '#prefix' => '<div class="mcoc-point-chart">',
+    '#markup' => '<div id="pointChartContainer">&nbsp;</div>',
+    '#suffix' =>'</div>'
+  );
+}
