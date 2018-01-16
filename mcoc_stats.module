@@ -28,14 +28,13 @@ function mcoc_stats_aq ($form, &$form_state) {
   $misses_array = array();
   $users_array = array();
   $aq_array = array();
+  $individual_points_array = array();
 
   // Attach our CSS
   $form['#attached']['css'] = array(drupal_get_path('module', 'mcoc_stats') . '/css/mcoc_stats.aq.css');
   // Attach our JS
   $form['#attached']['js'][] = drupal_get_path('module', 'mcoc_stats') . '/js/jquery.canvasjs.min.js';
   $form['#attached']['js'][] = drupal_get_path('module', 'mcoc_stats') . '/js/mcoc_stats.aq.js';
-
-  
 
   // Get all our individual aq records. 
   $query = new EntityFieldQuery();
@@ -47,31 +46,21 @@ function mcoc_stats_aq ($form, &$form_state) {
     // Load the node and wrap it.
     $node_entity = node_load($record->nid);
     $node_wrapper = entity_metadata_wrapper('node', $node_entity);
-    $group_id = $node_wrapper->field_aq_record->value()->nid;
+    $group_record_id = $node_wrapper->field_aq_record->value()->nid;
     // Load the user associated with the record so we can get their name.
     $user = $node_wrapper->field_member->value();
+    $uid = $user->uid;
     // Get their points so we can average them. 
     $points = $node_wrapper->field_points->value();
-    // Check to see if we've added this user yet (to avoid php warnings about unknown indexes).
-    if (!isset($points_array[$user->uid]) ) {
-      $points_array[$user->uid] = 0;
-      $misses_array[$user->uid] = 0;
-      $rounds_array[$user->uid] = 0;
-      $users_array[$user->uid] = $user->name;
-    } 
-    // Check to see if we've used this record before.
-    if (!isset($aq_array[$group_id])) {
-      $aq_array[$group_id] = 0;      
-    }
-
-    // Add the points to the member's personal total and the group total.
-    $points_array[$user->uid] += $points;
-    $aq_array[$group_id] += $points;    
-    // Record that this user participated this round. 
-    $rounds_array[$user->uid]++;
+    
+    $users_array[$user->uid] = $user->name;
+    $individual_points_array[$group_record_id][$uid] = $points;
+    $points_array[$uid] = isset($points_array[$uid]) ? $points_array[$uid] += $points : $points;
+    $aq_array[$group_record_id] = isset($aq_array[$group_record_id]) ? $aq_array[$group_record_id] += $points : $points;
+    $rounds_array[$uid] = isset($rounds_array[$uid]) ? $rounds_array[$user->uid]++ : 1;
     // Check to see if his points are zero, meaning this person missed the round.
     if ($points == 0) {
-      $misses_array[$user->uid]++;
+      $misses_array[$uid] = isset($misses_array[$uid]) ? $misses_array[$uid]++ : 1;
     }
   }
   // Create our charts.

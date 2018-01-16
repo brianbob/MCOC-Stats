@@ -11,20 +11,23 @@
           theme: "light2",
           zoomEnabled: true,
           title: {
-            text: "BG2's AQ Total Point Trend"
+            text: "AQ Points Over Time",
+            verticalAlign: "top", 
+            horizontalAlign: "left",
+            padding: 15,
+            margin: 30
           },
           axisY: {
             title: "Points",
             titleFontSize: 24,
           },
           axisX: {
-            title: "Time",
-            titleFontSize: 24,
+            valueFormatString: "DD-MMM" ,
+            labelAngle: -37
           },
           data: [{
             type: "line",
             xValueType: "dateTime",
-            yValueFormatString: "#,##0",
             dataPoints: dps
           }]
         });
