@@ -271,34 +271,35 @@ function mcoc_stats_create_map_numbers_chart(&$form, $maps_array) {
 
   $values[] = array(
     'label' => 'Map 1',
-    'y' => $map_one / $map_total,
+    'y' => ($map_one / $map_total) * 100,
   );
 
   $values[] = array(
     'label' => 'Map 2',
-    'y' => $map_two / $map_total,
+    'y' => ($map_two / $map_total) * 100,
   );
 
   $values[] = array(
     'label' => 'Map 3',
-    'y' => $map_three / $map_total,
+    'y' => ($map_three / $map_total) * 100,
+    'exploded' => TRUE 
   );
 
   $values[] = array(
     'label' => 'Map 4',
-    'y' => $map_four / $map_total,
+    'y' => ($map_four / $map_total) * 100,
   );
 
   $values[] = array(
     'label' => 'Map 5',
-    'y' => $map_five / $map_total,
+    'y' => ($map_five / $map_total) * 100,
   );
 
   // Create our chart
   drupal_add_js(array('mcoc_stats' => array('map_number_data' => $values)), array('type' => 'setting'));
   // Create the form element for our chart to render in and styles to key off of. 
   $form['map-number-chart'] = array (
-    '#prefix' => '<div class="mcoc-chart-container" id="map-number-pie-chart"> <h2>Maps</h2> <div class="mcoc-map-number-chart mcoc-chart">',
+    '#prefix' => '<div class="mcoc-chart-container" id="map-number-pie-chart"> <h2>Map Selection</h2> <div class="mcoc-map-number-chart mcoc-chart">',
     '#markup' => '<div id="mapNumberChartContainer">&nbsp;</div>',
     '#suffix' =>'</div></div>'
   );
