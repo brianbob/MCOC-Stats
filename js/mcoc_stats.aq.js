@@ -6,6 +6,7 @@
         create_bg_point_chart();
         create_individual_point_chart();
         create_map_number_chart();
+        create_explored_bar_chart();
 
 
       });
@@ -126,7 +127,6 @@
 
       function create_bg_point_chart() {
         var bg_data = Drupal.settings.mcoc_stats.bg_data;
-        console.log(bg_data);
         var chart = new CanvasJS.Chart("bgPointChartContainer", {
           animationEnabled: true,
           theme: "light2",
@@ -167,6 +167,21 @@
         });
         chart.render();
       }
+
+      function create_explored_bar_chart() {
+        var explored_data = Drupal.settings.mcoc_stats.explored_data;
+        console.log(explored_data);
+        var chart = new CanvasJS.Chart("exploredChartContainer", {
+          animationEnabled: true,
+          theme: "light2", // "light1", "light2", "dark1", "dark2"
+          data: [{        
+            type: "column",  
+            dataPoints: explored_data,
+          }]
+        });
+        chart.render();      
+      }
+
     }
   };
 })(jQuery);

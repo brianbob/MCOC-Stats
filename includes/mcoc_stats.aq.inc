@@ -14,6 +14,7 @@ function mcoc_stats_aq ($form, &$form_state) {
   $aq_array = array();
   $top_ten_array = array();
   $maps_array = array();
+  $explored_array = array();
   $individual_points_array = array();
 
   // Attach our CSS
@@ -66,12 +67,12 @@ function mcoc_stats_aq ($form, &$form_state) {
     if (array_key_exists($record->nid, $top_ten)) {
       $top_ten_array[$points] = $user->name;
     }
+    // Record the map number for our stats.
     $map_number = $group_wrapper->field_aq_map_num->value();
     $maps_array[$group_record_id] = $map_number;
-    ddl($maps_array);
-    $percent_explored = $group_wrapper->field_aq_map_num->value();
-
-
+    // Record the explored percenage for our dashboards.
+    $percent_explored = $group_wrapper->field_explored_->value();
+    $explored_array[$group_record_id] = array('map' => $map_number, 'percentage' => $percent_explored);
   }
   // Create the individual points chart
   mcoc_stats_create_individual_points_chart($form, $individual_points_array);
@@ -85,6 +86,8 @@ function mcoc_stats_aq ($form, &$form_state) {
   mcoc_stats_create_map_numbers_chart($form, $maps_array);
   // Create misses table. 
   mcoc_stats_create_misses_table($form, $users_array, $misses_array);
+  // Create 'explored graph'. 
+  mcoc_stats_create_explored_graph($form, $explored_array);
 
   return $form;
 }
@@ -301,6 +304,87 @@ function mcoc_stats_create_map_numbers_chart(&$form, $maps_array) {
   $form['map-number-chart'] = array (
     '#prefix' => '<div class="mcoc-chart-container" id="map-number-pie-chart"> <h2>Map Selection</h2> <div class="mcoc-map-number-chart mcoc-chart">',
     '#markup' => '<div id="mapNumberChartContainer">&nbsp;</div>',
+    '#suffix' =>'</div></div>'
+  );
+}
+
+/**
+ * 
+ */
+function mcoc_stats_create_explored_graph(&$form, $maps_array) {
+  $values = array();
+  $map_one_explored = 0;
+  $map_one_num = 0;
+  $map_two_explored = 0;
+  $map_two_num = 0;
+  $map_three_explored = 0;
+  $map_three_num = 0;
+  $map_four_explored = 0;
+  $map_four_num = 0;
+  $map_five_explored = 0;
+  $map_five_num = 0;
+
+  foreach($maps_array as $map) {
+    ddl($map);
+    switch ($map['map']) {
+      case 1:
+        $map_one_explored += $map['percentage'];
+        $map_one_num++;
+        break;
+      case 2:
+        $map_two_explored += $map['percentage'];
+        $map_two_num++;
+        break;
+      case 3:
+        $map_three_explored += $map['percentage'];
+        $map_three_num++;
+        break;
+      case 4:
+        $map_four_explored += $map['percentage'];
+        $map_four_num++;
+        break;
+      case 5:
+        $map_five_explored += $map['percentage'];
+        $map_five_num++;
+        break;
+    }
+  }
+  $map_one_explored = empty($map_one_explored) ? 0 : $map_one_explored / $map_one_num;
+  $map_two_explored = empty($map_two_explored) ? 0 : $map_two_explored / $map_two_num;
+  $map_three_explored = empty($map_three_explored) ? 0 : $map_three_explored / $map_three_num;
+  $map_four_explored = empty($map_four_explored) ? 0 : $map_four_explored / $map_four_num;
+  $map_five_explored = empty($map_five_explored) ? 0 : $map_five_explored / $map_five_num;
+
+  $values[] = array(
+    'y' => $map_one_explored,
+    'label' => 'Map 1',
+  );
+
+  $values[] = array(
+    'y' => $map_two_explored,
+    'label' => 'Map 2',
+  );
+
+  $values[] = array(
+    'y' => $map_three_explored,
+    'label' => 'Map 3',
+  );
+
+  $values[] = array(
+    'y' => $map_four_explored,
+    'label' => 'Map 4',
+  );
+
+  $values[] = array(
+    'y' => $map_five_explored,
+    'label' => 'Map 5',
+  );
+  // Create our chart
+  drupal_add_js(array('mcoc_stats' => array('explored_data' => $values)), array('type' => 'setting'));
+  // Create the form element for our chart to render in and styles to key off of. 
+  $form['explored-chart'] = array (
+    '#prefix' => '<div class="mcoc-chart-container" id="explored-bar-chart"> <h2>Average Exploration % by Map</h2> <div class="mcoc-chart">',
+    '#markup' => '<div id="exploredChartContainer">&nbsp;</div>',
     '#suffix' =>'</div></div>'
   );
 }
