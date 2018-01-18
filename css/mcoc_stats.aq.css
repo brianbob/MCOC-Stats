@@ -80,3 +80,21 @@ h1#page-title {
   width: 30%;
   margin-left: 5%;
 }
+
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 736px) {
+    .mcoc-chart-container,
+    .mcoc-table-container {
+      display: block;
+      width: 100%;
+    }
+
+    /* overrides for a specific row */
+    #map-number-pie-chart,
+    #misses-table {
+      width: 100%;
+      margin-left: 0px;
+    }
+}

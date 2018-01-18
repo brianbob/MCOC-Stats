@@ -19,6 +19,14 @@ function mcoc_stats_menu() {
     'file' => 'includes/mcoc_stats.aq.inc',
   );
 
+  $items['mcoc/mass-upload-form'] = array(
+    'title' => 'AQ Mass Upload Form', 
+    'description' => 'Allows for uploading multiple bg and individual aq records.',
+    'page callback' => 'drupal_get_form', 
+    'page arguments' => array('mcoc_mass_upload_form'),
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
   return $items;
 }
 
@@ -36,4 +44,8 @@ function mcoc_stats_get_records($type, $top_ten = FALSE, $range = 10) {
 
   $records = $query->execute();
   return $records['node'];
+}
+
+function mcoc_mass_upload_form($form, $form_state) {
+  
 }
