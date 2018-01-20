@@ -26,6 +26,7 @@ function mcoc_stats_menu() {
     'page arguments' => array('mcoc_mass_upload_form'),
     'access callback' => TRUE,
     'type' => MENU_NORMAL_ITEM,
+    'file' => 'includes/mcoc_stats.mass-upload-form.inc',
   );
   return $items;
 }
@@ -46,73 +47,3 @@ function mcoc_stats_get_records($type, $top_ten = FALSE, $range = 10) {
   return $records['node'];
 }
 
-function mcoc_mass_upload_form($form, &$form_state) {
-  // Attach our CSS       
-  $form['#attached']['css'] = array(drupal_get_path('module', 'mcoc_stats') . '/css/mcoc_stats.mass-upload-aq.css');
-  $num_members = 30;
-  $members = array();
-  $users = entity_load('user');
-  // Load the users into an array.
-  foreach($users as $user) {
-    $members[$user->uid] = $user->name;
-  }
-
-  $form['day'] = array(
-    '#type' => 'textfield',
-    '#title' => 'Day #',
-  );
-
-  $form['map'] = array(
-    '#type' => 'textfield',
-    '#title' => 'Map #',
-  );
-
-  $form['date'] = array(
-    '#type' => 'date_popup',
-    '#timepicker' => 'timepicker',
-    '#title' => "AQ Start Date",
-    '#date_format' => 'm/d/Y',
-  );
-
-  $form['boss'] = array(
-    '#type' => 'textfield',
-    '#title' => 'Boss Defeated?',
-  );
-
-  $form['explored'] = array(
-    '#type' => 'textfield',
-    '#title' => 'Explored %',
-  );
-
-  $form['bg'] = array(
-    '#type' => 'textfield',
-    '#title' => 'BG #',
-  );
-
-  $form['row_wrapper'] = array(
-    '#container' => TRUE,
-    '#pre' => '<div class="mass-upload-form-container">',
-    '#post' => '</div>',
-  );
-
-  for ($i=0; $i < $num_members; $i++) {
-
-    $form['row_wrapper'][$i]['member'] = array(
-      '#type' => 'select',
-      '#title' => "Memeber $i",
-      '#options' => $members,
-    );
-    
-    
-    $form['row_wrapper'][$i]['points'] = array(
-      '#type' => 'textfield',
-      '#title' => "Points",
-    );
-
-    $form['row_wrapper'][$i]['clearall'] = array(
-      '#markup' => '<div class="clearall">&nbsp;</div>',
-    );
-  }
-
-  return $form;
-}

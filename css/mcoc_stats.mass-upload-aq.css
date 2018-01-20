@@ -1,13 +1,143 @@
-.form-item-member,
-.form-item-points {
+.form-item-bg-1-row-wrapper-1-points,
+.form-item-bg-1-row-wrapper-2-points,
+.form-item-bg-1-row-wrapper-3-points,
+.form-item-bg-1-row-wrapper-4-points,
+.form-item-bg-1-row-wrapper-5-points,
+.form-item-bg-1-row-wrapper-6-points,
+.form-item-bg-1-row-wrapper-7-points,
+.form-item-bg-1-row-wrapper-8-points,
+.form-item-bg-1-row-wrapper-9-points,
+.form-item-bg-1-row-wrapper-10-points,
+.form-item-bg-2-row-wrapper-1-points,
+.form-item-bg-2-row-wrapper-2-points,
+.form-item-bg-2-row-wrapper-3-points,
+.form-item-bg-2-row-wrapper-4-points,
+.form-item-bg-2-row-wrapper-5-points,
+.form-item-bg-2-row-wrapper-6-points,
+.form-item-bg-2-row-wrapper-7-points,
+.form-item-bg-2-row-wrapper-8-points,
+.form-item-bg-2-row-wrapper-9-points,
+.form-item-bg-2-row-wrapper-10-points,
+.form-item-bg-3-row-wrapper-1-points,
+.form-item-bg-3-row-wrapper-2-points,
+.form-item-bg-3-row-wrapper-3-points,
+.form-item-bg-3-row-wrapper-4-points,
+.form-item-bg-3-row-wrapper-5-points,
+.form-item-bg-3-row-wrapper-6-points,
+.form-item-bg-3-row-wrapper-7-points,
+.form-item-bg-3-row-wrapper-8-points,
+.form-item-bg-3-row-wrapper-9-points,
+.form-item-bg-3-row-wrapper-10-points,
+.form-item-bg-1-row-wrapper-1-member,
+.form-item-bg-1-row-wrapper-2-member,
+.form-item-bg-1-row-wrapper-3-member,
+.form-item-bg-1-row-wrapper-4-member,
+.form-item-bg-1-row-wrapper-5-member,
+.form-item-bg-1-row-wrapper-6-member,
+.form-item-bg-1-row-wrapper-7-member,
+.form-item-bg-1-row-wrapper-8-member,
+.form-item-bg-1-row-wrapper-9-member,
+.form-item-bg-1-row-wrapper-10-member,
+.form-item-bg-2-row-wrapper-1-member,
+.form-item-bg-2-row-wrapper-2-member,
+.form-item-bg-2-row-wrapper-3-member,
+.form-item-bg-2-row-wrapper-4-member,
+.form-item-bg-2-row-wrapper-5-member,
+.form-item-bg-2-row-wrapper-6-member,
+.form-item-bg-2-row-wrapper-7-member,
+.form-item-bg-2-row-wrapper-8-member,
+.form-item-bg-2-row-wrapper-9-member,
+.form-item-bg-2-row-wrapper-10-member,
+.form-item-bg-3-row-wrapper-1-member,
+.form-item-bg-3-row-wrapper-2-member,
+.form-item-bg-3-row-wrapper-3-member,
+.form-item-bg-3-row-wrapper-4-member,
+.form-item-bg-3-row-wrapper-5-member,
+.form-item-bg-3-row-wrapper-6-member,
+.form-item-bg-3-row-wrapper-7-member,
+.form-item-bg-3-row-wrapper-8-member,
+.form-item-bg-3-row-wrapper-9-member,
+.form-item-bg-3-row-wrapper-10-member {
+  display: inline	;
 }
 
 .clearall {
   clear: both;
 }
 
-.form-item input,
-.form-item label {
-  display: inline;
+#mcoc-mass-upload-form .form-item input,
+#mcoc-mass-upload-form .form-item label {
+  display: inline-block;
   max-width: 100px;
+}
+
+#mcoc-mass-upload-form div.description {
+  display: none;
+}
+
+.container-inline-date div#edit-bg-1-date,
+.container-inline-date div#edit-bg-2-date,
+.container-inline-date div#edit-bg-3-date {
+  padding: 0px;
+}
+
+div.form-item-date-date label {
+  font-size: 14px;	
+}
+
+.form-type-textfield input {
+  height: 33px;		
+}
+
+.form-item-bg-1-day,
+.form-item-bg-2-day,
+.form-item-bg-3-day,
+.form-item-bg-1-explored,
+.form-item-bg-2-explored,
+.form-item-bg-3-explored,
+.form-item-bg-1-map,
+.form-item-bg-2-map,
+.form-item-bg-3-map,
+.container-inline-date {
+  display: inline;
+}
+
+.form-item label {
+  margin-left: 20px;
+}
+
+#mcoc-mass-upload-form .form-item-bg-1-boss,
+#mcoc-mass-upload-form .form-item-bg-2-boss,
+#mcoc-mass-upload-form .form-item-bg-3-boss {
+  margin-top: 10px;
+}
+
+#mcoc-mass-upload-form .form-item-bg-1-boss label,
+#mcoc-mass-upload-form .form-item-bg-2-boss label,
+#mcoc-mass-upload-form .form-item-bg-3-boss label {
+  display: inline-block;
+  width : 125px;
+  max-width : 150px;
+}
+
+#edit-bg-1-boss,
+#edit-bg-2-boss,
+#edit-bg-3-boss {
+  display: inline-block;
+}
+
+#mcoc-mass-upload-form .form-item-bg-1-boss .form-type-checkbox,
+#mcoc-mass-upload-form .form-item-bg-2-boss .form-type-checkbox,
+#mcoc-mass-upload-form .form-item-bg-3-boss .form-type-checkbox {
+	display: inline-block;
+}
+
+#mcoc-mass-upload-form .form-item-bg-1-boss .form-type-checkbox label,
+#mcoc-mass-upload-form .form-item-bg-2-boss .form-type-checkbox label,
+#mcoc-mass-upload-form .form-item-bg-3-boss .form-type-checkbox label {
+  width: 50px;
+}
+
+.form-submit {
+	margin-top: 15px;
 }
