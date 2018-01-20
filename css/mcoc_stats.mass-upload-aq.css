@@ -1,0 +1,13 @@
+.form-item-member,
+.form-item-points {
+}
+
+.clearall {
+  clear: both;
+}
+
+.form-item input,
+.form-item label {
+  display: inline;
+  max-width: 100px;
+}
