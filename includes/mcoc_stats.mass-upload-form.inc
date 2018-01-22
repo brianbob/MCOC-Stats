@@ -106,17 +106,29 @@ function mcoc_mass_upload_form($form, &$form_state) {
 function mcoc_mass_upload_form_submit($form, $form_state) {
   $values = $form_state['values'];
 
-  $entity = array(
+  $bg_entity = array(
     'type' => 'alliance_aq_record',
     'uid' => 1,
     'status' => 1,
     'comment' => 0,
     'promote' => 0,
   );
+
+  $individual_entity = array(
+    'type' => 'individual_aq_record',
+    'uid' => 1,
+    'status' => 1,
+    'comment' => 0,
+    'promote' => 0,
+  );
+
   // Look at each one of our battlegroups.
   for ($bg=1; $bg <= NUM_BGS; $bg++) {
-    $nid = mcoc_mass_upload_create_bg_aq_record($values, $entity, $bg);
-    // @todo iterate over each member for each bg and create the individual records.
+    $nid = mcoc_mass_upload_create_bg_aq_record($values, $bg_entity, $bg);
+    // Iterate over each member for each bg and create the individual records.
+    foreach ($values["bg-$bg"]['row_wrapper'] as $record) {
+      mcoc_mass_upload_create_individual_aq_record($individual_entity, $record, $nid, $values["bg-$bg"]['date']);
+    }
   }
 }
 
@@ -127,23 +139,45 @@ function mcoc_mass_upload_create_bg_aq_record($values, $entity, $bg) {
   // Create the entity and wrap it. 
   $bg_entity = entity_create('node', $entity);
   $bg_wrapper = entity_metadata_wrapper('node', $bg_entity);
-  // Set all of our values
-  $bg_wrapper->field_aq_day_num->set($values["bg-$bg"]['day']);
-  $bg_wrapper->field_aq_map_num->set($values["bg-$bg"]['map']);
-  $bg_wrapper->field_boss_defeated->set($values["bg-$bg"]['boss'][1]);
-  $bg_wrapper->field_explored_->set($values["bg-$bg"]['explored']);
-  // Identify the battlegroup.
-  $bg_wrapper->field_bg_->set($bg);
-  // The date field takes some calcuations...
+  // Set some variables. 
+  $map = $values["bg-$bg"]['map'];
+  $day = $values["bg-$bg"]['day'];
   $start_date = $values["bg-$bg"]['date'];
   // The end date is always 24 hours after the start date. We don't track
   // minutes or hours so this should work out nicely.
   $end_date = date('Y-m-d', strtotime($start_date. ' + 1 days'));;
+  // Set all of our values on the wrapper
+  $bg_wrapper->field_aq_day_num->set($day);
+  $bg_wrapper->field_aq_map_num->set($map);
+  $bg_wrapper->field_boss_defeated->set($values["bg-$bg"]['boss'][1]);
+  $bg_wrapper->field_explored_->set($values["bg-$bg"]['explored']);
+  // Identify the battlegroup.
+  $bg_wrapper->field_bg_->set($bg);
+  // Set the start and End date. 
   $bg_wrapper->field_date_range->set(array(
     'value' => $start_date,
     'value2' => $end_date,
   ));
+  // Set the title to the start date. 
+  $bg_wrapper->title->set("BG$bg AQ Record (Map $map, Day $day) on $start_date");  
   // Save the wrapper. 
   $bg_wrapper->save();
   return $bg_entity->nid;
+}
+
+/**
+  *
+  */
+function mcoc_mass_upload_create_individual_aq_record($entity, $record, $nid, $date) {
+  // Create the entity and wrap it. 
+  $ind_entity = entity_create('node', $entity);
+  $ind_wrapper = entity_metadata_wrapper('node', $ind_entity);
+  $member = $record['member'];
+  // Set the values.
+  $ind_wrapper->title->set("Individual AQ record for member $member on $date");
+  $ind_wrapper->field_aq_record->set($nid);
+  $ind_wrapper->field_member->set($member);
+  $ind_wrapper->field_points->set($record['points']);
+  // Save the record
+  $ind_wrapper->save();
 }
