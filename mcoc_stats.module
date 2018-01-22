@@ -24,7 +24,7 @@ function mcoc_stats_menu() {
     'description' => 'Allows for uploading multiple bg and individual aq records.',
     'page callback' => 'drupal_get_form', 
     'page arguments' => array('mcoc_mass_upload_form'),
-    'access callback' => TRUE,
+    'access callback' => 'user_is_logged_in',
     'type' => MENU_NORMAL_ITEM,
     'file' => 'includes/mcoc_stats.mass-upload-form.inc',
   );
