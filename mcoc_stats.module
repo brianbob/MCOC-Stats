@@ -32,9 +32,87 @@ function mcoc_stats_menu() {
 }
 
 /**
+ *  Implements hook_block_info()
+ */
+function mcoc_stats_block_info() {    
+  $blocks['individual_stats_aq'] = array(
+    'info' => t('Individual AQ Stats'),
+  );
+
+  $blocks['individual_stats_war'] = array(
+    'info' => t('Individual War Stats'),
+  );
+
+  return $blocks;
+}
+
+/**
+ *  Implements hook_block_view()
+ */
+function mcoc_stats_block_view($delta = '') {
+  $block = array();
+  // The $delta parameter tells us which block is being requested.
+  switch ($delta) {
+    case 'individual_stats_aq':
+      $user_id = arg(1);
+      $user = user_load($user_id);
+      $records = mcoc_stats_get_records('individual_aq_record', FALSE, NULL, $user_id) ;
+      $individual_points_array = array();
+    
+      foreach($records as $record) {
+        // Load each record so we can pull the stats from it. 
+        $individiual_entity = node_load($record->nid);
+        // Wrap the individual AQ node.
+        $individual_wrapper = entity_metadata_wrapper('node', $individiual_entity);
+        // Get the points scored.  
+        $points = $individual_wrapper->field_points->value();
+        $group_record_id = $individual_wrapper->field_aq_record->value()->nid;
+        // Wrap the bg Aq node. 
+        $group_wrapper = entity_metadata_wrapper('node', $group_record_id);
+        // Categorize the individual array by date since that's how the chart wants it. 
+        $date_array = $group_wrapper->field_date_range->value();
+        $date_parts = explode( ' ', $date_array['value']);
+        $timestamp = strtotime($date_parts[0]) * 1000;
+        $individual_points_array[$timestamp][$user->name] = $points;
+      }  $values = array();
+  
+      foreach($individual_points_array as $timestamp => $individuals) {
+        foreach($individuals as $name => $points) {
+          $values[$name][] = array(
+            'x' => $timestamp,
+            'y' => (int) $points,
+          );
+        }
+      }
+
+      // Create our chart
+      drupal_add_js(array('mcoc_stats' => array('individual_data' => $values)), array('type' => 'setting'));
+
+      $block['content'] = array(
+        '#markup' => '<div class="mcoc-chart-container"> <h2>AQ Points</h2> <div class="mcoc-individiual-point-chart mcoc-chart"><div id="individualPointChartContainer">&nbsp;</div></div></div>',
+        '#attached' => array(
+            'css' => array(
+              drupal_get_path('module', 'mcoc_stats') . '/css/mcoc_stats.alliance-aq.css',
+            ),
+            'js' => array(
+              drupal_get_path('module', 'mcoc_stats') . '/js/jquery.canvasjs.min.js',
+              drupal_get_path('module', 'mcoc_stats') . '/js/mcoc_stats.individual-aq.js',
+          ),
+        ),
+      );
+
+      break;
+    case 'individual_stats_war':
+      break;
+   }
+
+  return $block;
+}
+
+/**
  * Get all of the individual AQ records.
  */
-function mcoc_stats_get_records($type, $top_ten = FALSE, $range = 10) {
+function mcoc_stats_get_records($type, $top_ten = FALSE, $range = 10, $user = NULL, $bg = NULL) {
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', $type);
@@ -43,7 +121,12 @@ function mcoc_stats_get_records($type, $top_ten = FALSE, $range = 10) {
     $query->fieldOrderBy('field_points', 'value', 'DESC')->range(0, $range);
   }
 
+  if (!is_null($user)) {
+    $query->fieldCondition('field_member', 'target_id', $user);
+  }
+
   $records = $query->execute();
+
   return $records['node'];
 }
 

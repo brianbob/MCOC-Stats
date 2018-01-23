@@ -18,10 +18,10 @@ function mcoc_stats_aq ($form, &$form_state) {
   $individual_points_array = array();
 
   // Attach our CSS
-  $form['#attached']['css'] = array(drupal_get_path('module', 'mcoc_stats') . '/css/mcoc_stats.aq.css');
+  $form['#attached']['css'] = array(drupal_get_path('module', 'mcoc_stats') . '/css/mcoc_stats.alliance-aq.css');
   // Attach our JS
   $form['#attached']['js'][] = drupal_get_path('module', 'mcoc_stats') . '/js/jquery.canvasjs.min.js';
-  $form['#attached']['js'][] = drupal_get_path('module', 'mcoc_stats') . '/js/mcoc_stats.aq.js';
+  $form['#attached']['js'][] = drupal_get_path('module', 'mcoc_stats') . '/js/mcoc_stats.alliance-aq.js';
 
   // Get all our individual aq records. 
   $individual_records = mcoc_stats_get_records('individual_aq_record');
