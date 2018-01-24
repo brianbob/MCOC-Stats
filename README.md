@@ -20,6 +20,7 @@ This is a side/"for-fun" project. It is far from perfect, and there are things i
 * [x] Add an individual AQ stats chart to the user page. 
 * [x] Add comments to individual aq content type. 
 * [x] Add 'items used' to individual aq content type (and individual war content type. )
+* [ ] Add support for items used in the mass upload form. 
 * [ ] Update the user names on the dashboard to link to the individual pages
 * [x] Export the content types as features.
 * [ ] Add support for multiple BGs and create multiple dashboards, one for each BG

@@ -21,15 +21,30 @@ function mcoc_stats_menu() {
     'file' => 'includes/mcoc_stats.aq.inc',
   );
 
-  $items['mcoc/mass-upload-form'] = array(
-    'title' => 'AQ Mass Upload Form', 
+  $items['admin/mcoc'] = array(
+    'title' => 'MCOC', 
+    'description' => 'mcoc sub-menu',
+    'access arguments' => array('access administration pages'),
+  );
+
+  $items['admin/mcoc/aq-upload-form'] = array(
+    'title' => 'AQ Upload Form', 
     'description' => 'Allows for uploading multiple bg and individual aq records.',
     'page callback' => 'drupal_get_form', 
     'page arguments' => array('mcoc_mass_upload_form'),
-    'access callback' => 'user_is_logged_in',
-    'type' => MENU_NORMAL_ITEM,
+    'access arguments' => array('access administration pages'),
     'file' => 'includes/mcoc_stats.mass-upload-form.inc',
   );
+
+  $items['admin/mcoc/war-upload-form'] = array(
+    'title' => 'War Upload Form', 
+    'description' => 'Allows for uploading multiple bg and individual aq records.',
+    'page callback' => 'drupal_get_form', 
+    'page arguments' => array('mcoc_mass_upload_form'),
+    'access arguments' => array('access administration pages'),
+    'file' => 'includes/mcoc_stats.mass-upload-form.inc',
+  );
+
   return $items;
 }
 

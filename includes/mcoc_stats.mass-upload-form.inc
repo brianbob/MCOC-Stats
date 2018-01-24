@@ -87,6 +87,16 @@ function mcoc_mass_upload_form($form, &$form_state) {
         '#type' => 'textfield',
         '#title' => "Points",
       );
+      // Member points.      
+      $form["bg-$bg"]['row_wrapper'][$i]['items'] = array(
+        '#type' => 'textfield',
+        '#title' => "Items Used",
+      );
+      // Member points.      
+      $form["bg-$bg"]['row_wrapper'][$i]['comments'] = array(
+        '#type' => 'textfield',
+        '#title' => "Comments",
+      );
       // Formatting help.
       $form["bg-$bg"]['row_wrapper'][$i]['clearall'] = array(
         '#markup' => '<div class="clearall">&nbsp;</div>',
