@@ -14,9 +14,18 @@
       function create_individual_point_chart() {
         var individual_data = Drupal.settings.mcoc_stats.individual_data;
         var keys = Object.keys(individual_data);
-        //console.log(individual_data);
-        //console.log(keys);
-        //console.log(individual_data[keys[0]]);
+        var data_points = [];
+
+        for (var i = 0; i < keys.length; i++)  {
+          data_points[i] =  {
+            type: "line",
+            xValueType: "dateTime",
+            dataPoints: individual_data[keys[i]],
+            showInLegend: true, 
+            legendText: keys[i],
+          };
+        }
+
         var chart = new CanvasJS.Chart("individualPointChartContainer", {
           animationEnabled: true,
           theme: "light2",
@@ -38,8 +47,6 @@
             cursor: "pointer",
             fontSize: 12,
             itemclick: function (e) {
-                //console.log("legend click: " + e.dataPointIndex);
-                //console.log(e);
                 if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
                     e.dataSeries.visible = false;
                 } else {
@@ -49,78 +56,7 @@
                 e.chart.render();
             }
           },
-          data: [
-          {
-            type: "line",
-            xValueType: "dateTime",
-            dataPoints: individual_data[keys[0]],
-            showInLegend: true, 
-            legendText: keys[0],
-          },
-          {
-            type: "line",
-            xValueType: "dateTime",
-            dataPoints: individual_data[keys[1]],
-            showInLegend: true, 
-            legendText: keys[1],
-          },
-          {
-            type: "line",
-            xValueType: "dateTime",
-            dataPoints: individual_data[keys[2]],
-            showInLegend: true, 
-            legendText: keys[2],
-          },
-          {
-            type: "line",
-            xValueType: "dateTime",
-            dataPoints: individual_data[keys[3]],
-            showInLegend: true, 
-            legendText: keys[3],
-          },
-          {
-            type: "line",
-            xValueType: "dateTime",
-            dataPoints: individual_data[keys[4]],
-            showInLegend: true, 
-            legendText: keys[4],
-          },
-          {
-            type: "line",
-            xValueType: "dateTime",
-            dataPoints: individual_data[keys[5]],
-            showInLegend: true, 
-            legendText: keys[5],
-          },
-          {
-            type: "line",
-            xValueType: "dateTime",
-            dataPoints: individual_data[keys[6]],
-            showInLegend: true, 
-            legendText: keys[6],
-          },
-          {
-            type: "line",
-            xValueType: "dateTime",
-            dataPoints: individual_data[keys[7]],
-            showInLegend: true, 
-            legendText: keys[7],
-          },
-          {
-            type: "line",
-            xValueType: "dateTime",
-            dataPoints: individual_data[keys[8]],
-            showInLegend: true, 
-            legendText: keys[8],
-          },
-          {
-            type: "line",
-            xValueType: "dateTime",
-            dataPoints: individual_data[keys[9]],
-            showInLegend: true, 
-            legendText: keys[9],
-          },
-        ]
+          data: data_points,
         });
         chart.render();
       }
@@ -170,7 +106,6 @@
 
       function create_explored_bar_chart() {
         var explored_data = Drupal.settings.mcoc_stats.explored_data;
-        console.log(explored_data);
         var chart = new CanvasJS.Chart("exploredChartContainer", {
           animationEnabled: true,
           theme: "light2", // "light1", "light2", "dark1", "dark2"
