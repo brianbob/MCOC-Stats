@@ -5,6 +5,8 @@
  *  - Pull the aq-specific functions out of .module and add it to it's own .inc file. 
  */
 
+include_once 'mcoc_stats.features.inc';
+
 /**
  * Implements hook_menu.
  */
