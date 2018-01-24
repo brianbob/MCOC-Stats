@@ -18,10 +18,10 @@ This is a side/"for-fun" project. It is far from perfect, and there are things i
 * [x] Add a graph for map selection
 * [x] Add a chart for exploration percentage.
 * [x] Add an individual AQ stats chart to the user page. 
-* [ ] Add comments to individual aq content type. 
-* [ ] Add 'items used' to individual aq content type (and individual war content type. )
+* [x] Add comments to individual aq content type. 
+* [x] Add 'items used' to individual aq content type (and individual war content type. )
 * [ ] Update the user names on the dashboard to link to the individual pages
-* [ ] Export the content types as features.
+* [x] Export the content types as features.
 * [ ] Add support for multiple BGs and create multiple dashboards, one for each BG
 * [ ] Create a 'total alliance' dashboard.
 * [ ] Add support for war stats?

@@ -199,7 +199,6 @@ function mcoc_stats_create_individual_points_chart(&$form, $individual_points_ar
     }
   }
 
-  ddl($values);
   // Create our chart
   drupal_add_js(array('mcoc_stats' => array('individual_data' => $values)), array('type' => 'setting'));
   // Create the form element for our chart to render in and styles to key off of. 
