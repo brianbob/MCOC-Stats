@@ -13,10 +13,17 @@ function mcoc_aq_settings_form($form, &$form_state) {
   );
 
   $form['mcoc_aq_num_bgs'] = array(
-      '#type' => 'textfield',
-      '#title' => 'Number of BGs',
+     '#type' => 'textfield',
+    '#title' => 'Number of BGs',
 	  '#default_value' => variable_get('mcoc_aq_num_bgs'),
   );
+
+  $form['mcoc_aq_num_top'] = array(
+    '#type' => 'textfield',
+    '#title' => 'Number of "Top Records" to show',
+    '#default_value' => variable_get('mcoc_aq_num_top'),
+  );
+
 
   return system_settings_form($form);
 }

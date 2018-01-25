@@ -26,7 +26,7 @@ function mcoc_stats_aq ($form, &$form_state, $bg_number) {
   $bg = isset($bg_number) ? $bg_number : NULL;
   // Get all our individual aq records. 
   $individual_records = mcoc_stats_get_records('individual_aq_record', FALSE, NULL, NULL, $bg);
-  $top_ten = mcoc_stats_get_records('individual_aq_record', TRUE, 11, NULL, $bg);
+  $top_ten = mcoc_stats_get_records('individual_aq_record', TRUE, variable_get('mcoc_aq_num_top', 10), NULL, $bg);
   // See if we should filter out all non-current members.
   $current = variable_get('mcoc_aq_filter_current')['Yes'] === 'Yes';
   // Iterate over the records.
@@ -44,7 +44,7 @@ function mcoc_stats_aq ($form, &$form_state, $bg_number) {
     // Wrap the user. 
     $user_wrapper = entity_metadata_wrapper('user', $user);
     // Save the UID, mostly to save space down below. 
-    $uid = $user->uid; ddl($user);
+    $uid = $user->uid;
     // Check to see first if we're looking for current members only, and if we are if they match. 
     if (($current && $user_wrapper->field_bg_->value() == $individual_wrapper->field_bg_->value()) || !$current) {
       $name = "<a href='/user/$uid'>$user->name</a>";
@@ -83,6 +83,7 @@ function mcoc_stats_aq ($form, &$form_state, $bg_number) {
       $explored_array[$group_record_id] = array('map' => $map_number, 'percentage' => $percent_explored);
     }
   }
+  ddl($top_ten_array, 'tta');
   // Create the individual points chart
   mcoc_stats_create_individual_points_chart($form, $individual_points_array);
   // Create the first round of tables. 
@@ -109,7 +110,7 @@ function mcoc_stats_create_avg_table(&$form, $users, $points, $rounds) {
   $i = 0;
   $rows = array();
   // Create the header for our table. 
-  $header = array('#', 'Name', 'Average Points', '# of AQs');
+  $header = array('#', 'Name', 'Average Points', 'AQs on Record');
   // Calculate our averages
   foreach($points as $id => $score) {
     // Calculate the average points based on the user ID. 
