@@ -79,7 +79,7 @@ function mcoc_mass_upload_form($form, &$form_state) {
       // Member select form to be used by our entity reference field.
       $form["bg-$bg"]['row_wrapper'][$i]['member'] = array(
         '#type' => 'select',
-        '#title' => "Memeber $i",
+        '#title' => "Member $i",
         '#options' => $members,        
       );
       // Member points.      
@@ -91,6 +91,7 @@ function mcoc_mass_upload_form($form, &$form_state) {
       $form["bg-$bg"]['row_wrapper'][$i]['items'] = array(
         '#type' => 'textfield',
         '#title' => "Items Used",
+        '#default_value' => 0, 
       );
       // Member points.      
       $form["bg-$bg"]['row_wrapper'][$i]['comments'] = array(
@@ -183,11 +184,14 @@ function mcoc_mass_upload_create_individual_aq_record($entity, $record, $nid, $d
   $ind_entity = entity_create('node', $entity);
   $ind_wrapper = entity_metadata_wrapper('node', $ind_entity);
   $member = $record['member'];
+  $comments = isset($record['comments']) ? $record['comments'] : '';
   // Set the values.
   $ind_wrapper->title->set("Individual AQ record for member $member on $date");
   $ind_wrapper->field_aq_record->set($nid);
   $ind_wrapper->field_member->set($member);
   $ind_wrapper->field_points->set($record['points']);
+  $ind_wrapper->field_items_used->set($record['items']);
+  $ind_wrapper->field_comments->set($comments);
   // Save the record
   $ind_wrapper->save();
 }

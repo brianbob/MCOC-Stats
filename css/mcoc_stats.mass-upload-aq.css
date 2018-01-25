@@ -1,63 +1,5 @@
-.form-item-bg-1-row-wrapper-1-points,
-.form-item-bg-1-row-wrapper-2-points,
-.form-item-bg-1-row-wrapper-3-points,
-.form-item-bg-1-row-wrapper-4-points,
-.form-item-bg-1-row-wrapper-5-points,
-.form-item-bg-1-row-wrapper-6-points,
-.form-item-bg-1-row-wrapper-7-points,
-.form-item-bg-1-row-wrapper-8-points,
-.form-item-bg-1-row-wrapper-9-points,
-.form-item-bg-1-row-wrapper-10-points,
-.form-item-bg-2-row-wrapper-1-points,
-.form-item-bg-2-row-wrapper-2-points,
-.form-item-bg-2-row-wrapper-3-points,
-.form-item-bg-2-row-wrapper-4-points,
-.form-item-bg-2-row-wrapper-5-points,
-.form-item-bg-2-row-wrapper-6-points,
-.form-item-bg-2-row-wrapper-7-points,
-.form-item-bg-2-row-wrapper-8-points,
-.form-item-bg-2-row-wrapper-9-points,
-.form-item-bg-2-row-wrapper-10-points,
-.form-item-bg-3-row-wrapper-1-points,
-.form-item-bg-3-row-wrapper-2-points,
-.form-item-bg-3-row-wrapper-3-points,
-.form-item-bg-3-row-wrapper-4-points,
-.form-item-bg-3-row-wrapper-5-points,
-.form-item-bg-3-row-wrapper-6-points,
-.form-item-bg-3-row-wrapper-7-points,
-.form-item-bg-3-row-wrapper-8-points,
-.form-item-bg-3-row-wrapper-9-points,
-.form-item-bg-3-row-wrapper-10-points,
-.form-item-bg-1-row-wrapper-1-member,
-.form-item-bg-1-row-wrapper-2-member,
-.form-item-bg-1-row-wrapper-3-member,
-.form-item-bg-1-row-wrapper-4-member,
-.form-item-bg-1-row-wrapper-5-member,
-.form-item-bg-1-row-wrapper-6-member,
-.form-item-bg-1-row-wrapper-7-member,
-.form-item-bg-1-row-wrapper-8-member,
-.form-item-bg-1-row-wrapper-9-member,
-.form-item-bg-1-row-wrapper-10-member,
-.form-item-bg-2-row-wrapper-1-member,
-.form-item-bg-2-row-wrapper-2-member,
-.form-item-bg-2-row-wrapper-3-member,
-.form-item-bg-2-row-wrapper-4-member,
-.form-item-bg-2-row-wrapper-5-member,
-.form-item-bg-2-row-wrapper-6-member,
-.form-item-bg-2-row-wrapper-7-member,
-.form-item-bg-2-row-wrapper-8-member,
-.form-item-bg-2-row-wrapper-9-member,
-.form-item-bg-2-row-wrapper-10-member,
-.form-item-bg-3-row-wrapper-1-member,
-.form-item-bg-3-row-wrapper-2-member,
-.form-item-bg-3-row-wrapper-3-member,
-.form-item-bg-3-row-wrapper-4-member,
-.form-item-bg-3-row-wrapper-5-member,
-.form-item-bg-3-row-wrapper-6-member,
-.form-item-bg-3-row-wrapper-7-member,
-.form-item-bg-3-row-wrapper-8-member,
-.form-item-bg-3-row-wrapper-9-member,
-.form-item-bg-3-row-wrapper-10-member {
+.form-type-textfield,
+.form-type-select {
   display: inline	;
 }
 
@@ -68,7 +10,8 @@
 #mcoc-mass-upload-form .form-item input,
 #mcoc-mass-upload-form .form-item label {
   display: inline-block;
-  max-width: 100px;
+  max-width: 105px;
+  padding-left: 5px;
 }
 
 #mcoc-mass-upload-form div.description {
@@ -77,7 +20,10 @@
 
 .container-inline-date div#edit-bg-1-date,
 .container-inline-date div#edit-bg-2-date,
-.container-inline-date div#edit-bg-3-date {
+.container-inline-date div#edit-bg-3-date,
+div.container-inline-date .form-item-bg-1-date-date,
+div.container-inline-date .form-item-bg-2-date-date,
+div.container-inline-date .form-item-bg-3-date-date {
   padding: 0px;
 }
 
@@ -140,4 +86,11 @@ div.form-item-date-date label {
 
 .form-submit {
 	margin-top: 15px;
+}
+
+#mcoc-mass-upload-form .form-item-bg-1-boss label,
+#mcoc-mass-upload-form .form-item-bg-2-boss label,
+#mcoc-mass-upload-form .form-item-bg-3-boss label {
+  width: 150px;
+  padding-top: 10px;
 }

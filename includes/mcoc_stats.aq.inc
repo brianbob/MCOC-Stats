@@ -40,19 +40,20 @@ function mcoc_stats_aq ($form, &$form_state) {
     $user = $individual_wrapper->field_member->value();
     // Save the UID, mostly to save space down below. 
     $uid = $user->uid;
+    $name = "<a href='/user/$uid'>$user->name</a>";
     // Get their points so we can average them. 
-    $points = $individual_wrapper->field_points->value();
+    $points = (int) $individual_wrapper->field_points->value();
     // Add the username to our list of users. 
-    $users_array[$user->uid] = $user->name;
+    $users_array[$user->uid] = $name;
     // Categorize the individual array by date since that's how the chart wants it. 
     $date_array = $group_wrapper->field_date_range->value();
     $date_parts = explode( ' ', $date_array['value']);
     $timestamp = strtotime($date_parts[0]) * 1000;
     $individual_points_array[$timestamp][$user->name] = $points;
     //
-    $points_array[$uid] = isset($points_array[$uid]) ? $points_array[$uid] += $points : $points;
+    $points_array[$uid] = isset($points_array[$uid]) ? $points_array[$uid] += (int) $points : (int) $points;
     // @todo change this to index by date instead of aq record number. 
-    $aq_array[$group_record_id] = isset($aq_array[$group_record_id]) ? $aq_array[$group_record_id] += $points : $points;
+    $aq_array[$group_record_id] = isset($aq_array[$group_record_id]) ? $aq_array[$group_record_id] += (int) $points : (int) $points;
     // Weird... $array_name[$index]++ doesn't seem to work, but $array_name[$index] += 1 does?
     $rounds_array[$uid] = (isset($rounds_array[$uid]) ? $rounds_array[$uid] += 1 : 1);
     // Check to see if his points are zero, meaning this person missed the round.
@@ -65,7 +66,7 @@ function mcoc_stats_aq ($form, &$form_state) {
       $misses_array[$uid] = isset($misses_array[$uid]) ? $misses_array[$uid] : 0;
     }
     if (array_key_exists($record->nid, $top_ten)) {
-      $top_ten_array[$points] = $user->name;
+      $top_ten_array[$points] = $name;
     }
     // Record the map number for our stats.
     $map_number = $group_wrapper->field_aq_map_num->value();
@@ -99,22 +100,25 @@ function mcoc_stats_create_avg_table(&$form, $users, $points, $rounds) {
   // Variables!
   $i = 0;
   $rows = array();
+  // Create the header for our table. 
+  $header = array('#', 'Name', 'Average Points');
+  // Calculate our averages
+  foreach($points as $id => $score) {
+    // Calculate the average points based on the user ID. 
+    $points[$id] = $score / $rounds[$id];
+  }
 
   // Sort the array by points. This is why our arrays needed to be individual arrays 
   // instead of one big array. I had trouble sorting the multi-dimensional arrays :(
   arsort($points);
-  // Create the header for our table. 
-  $header = array('#', 'Name', 'Average Points');
-  // Calculate our stats and create the table
+
   foreach($points as $id => $score) {
     $i++;
-    // Calculate the average points based on the user ID. 
-    $average = $score / $rounds[$id];
     // Add the data to our rows array for theme_table() 
     $rows[] = array(
       array('data' => $i, 'align' => 'center'),
       array('data' => $users[$id], 'align' => 'center'),
-      array('data' => number_format($average, 0), 'align' => 'center'),
+      array('data' => number_format($points[$id], 0), 'align' => 'center'),
     );
   }
   // Create the form element for our chart to render in and styles to key off of. 
