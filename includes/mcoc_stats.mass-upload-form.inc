@@ -1,8 +1,5 @@
 <?php
 
-// @todo Load these settings from a settings page?
-DEFINE('NUM_BGS', 1);
-
 /**
  * Page callback for the mass upload form. 
  */
@@ -10,6 +7,7 @@ function mcoc_mass_upload_form($form, &$form_state) {
   // Attach our CSS       
   $path = drupal_get_path('module', 'mcoc_stats') . '/css/mcoc_stats.mass-upload-aq.css';
   $form['#attached']['css'] = array($path);
+  $num_bgs = variable_get('mcoc_aq_num_bgs', 3);
 
   $num_members_per_bg = 10;
   // Load up our users and put them into an array. 
@@ -19,7 +17,7 @@ function mcoc_mass_upload_form($form, &$form_state) {
     $members[$user->uid] = $user->name;
   }
 
-  for ($bg=1; $bg <= NUM_BGS; $bg++ ) {
+  for ($bg=1; $bg <= $num_bgs; $bg++ ) {
     $form["bg-$bg"] = array(
       '#type' => 'fieldset', 
       '#title' => t("BG #$bg"), 
@@ -134,7 +132,7 @@ function mcoc_mass_upload_form_submit($form, $form_state) {
   );
 
   // Look at each one of our battlegroups.
-  for ($bg=1; $bg <= NUM_BGS; $bg++) {
+  for ($bg=1; $bg <= $num_bgs; $bg++) {
     $nid = mcoc_mass_upload_create_bg_aq_record($values, $bg_entity, $bg);
     // Iterate over each member for each bg and create the individual records.
     foreach ($values["bg-$bg"]['row_wrapper'] as $record) {

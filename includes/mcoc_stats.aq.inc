@@ -3,7 +3,7 @@
 /**
  * Page callback for the AQ stats page. 
  */
-function mcoc_stats_aq ($form, &$form_state) {
+function mcoc_stats_aq ($form, &$form_state, $bg_number) {
   // Variables!
   $rows = array();
   $user_data = array();
@@ -22,10 +22,13 @@ function mcoc_stats_aq ($form, &$form_state) {
   // Attach our JS
   $form['#attached']['js'][] = drupal_get_path('module', 'mcoc_stats') . '/js/jquery.canvasjs.min.js';
   $form['#attached']['js'][] = drupal_get_path('module', 'mcoc_stats') . '/js/mcoc_stats.alliance-aq.js';
-
+  // Get the bg number from the args.
+  $bg = isset($bg_number) ? $bg_number : NULL;
   // Get all our individual aq records. 
-  $individual_records = mcoc_stats_get_records('individual_aq_record');
-  $top_ten = mcoc_stats_get_records('individual_aq_record', TRUE, 11);
+  $individual_records = mcoc_stats_get_records('individual_aq_record', FALSE, NULL, NULL, $bg);
+  $top_ten = mcoc_stats_get_records('individual_aq_record', TRUE, 11, NULL, $bg);
+  // See if we should filter out all non-current members.
+  $current = variable_get('mcoc_aq_filter_current')['Yes'] === 'Yes';
   // Iterate over the records.
   foreach ($individual_records as $record) {
     // Load the individual AQ node.
@@ -38,42 +41,47 @@ function mcoc_stats_aq ($form, &$form_state) {
     $group_wrapper = entity_metadata_wrapper('node', $group_record_id);
     // Load the user associated with the record so we can get their name.
     $user = $individual_wrapper->field_member->value();
+    // Wrap the user. 
+    $user_wrapper = entity_metadata_wrapper('user', $user);
     // Save the UID, mostly to save space down below. 
-    $uid = $user->uid;
-    $name = "<a href='/user/$uid'>$user->name</a>";
-    // Get their points so we can average them. 
-    $points = (int) $individual_wrapper->field_points->value();
-    // Add the username to our list of users. 
-    $users_array[$user->uid] = $name;
-    // Categorize the individual array by date since that's how the chart wants it. 
-    $date_array = $group_wrapper->field_date_range->value();
-    $date_parts = explode( ' ', $date_array['value']);
-    $timestamp = strtotime($date_parts[0]) * 1000;
-    $individual_points_array[$timestamp][$user->name] = $points;
-    //
-    $points_array[$uid] = isset($points_array[$uid]) ? $points_array[$uid] += (int) $points : (int) $points;
-    // @todo change this to index by date instead of aq record number. 
-    $aq_array[$group_record_id] = isset($aq_array[$group_record_id]) ? $aq_array[$group_record_id] += (int) $points : (int) $points;
-    // Weird... $array_name[$index]++ doesn't seem to work, but $array_name[$index] += 1 does?
-    $rounds_array[$uid] = (isset($rounds_array[$uid]) ? $rounds_array[$uid] += 1 : 1);
-    // Check to see if his points are zero, meaning this person missed the round.
-    if ($points == 0) {
-      $misses_array[$uid] = isset($misses_array[$uid]) ? $misses_array[$uid] += 1 : 1;
+    $uid = $user->uid; ddl($user);
+    // Check to see first if we're looking for current members only, and if we are if they match. 
+    if (($current && $user_wrapper->field_bg_->value() == $individual_wrapper->field_bg_->value()) || !$current) {
+      $name = "<a href='/user/$uid'>$user->name</a>";
+      // Get their points so we can average them. 
+      $points = (int) $individual_wrapper->field_points->value();
+      // Add the username to our list of users. 
+      $users_array[$user->uid] = $name;
+      // Categorize the individual array by date since that's how the chart wants it. 
+      $date_array = $group_wrapper->field_date_range->value();
+      $date_parts = explode( ' ', $date_array['value']);
+      $timestamp = strtotime($date_parts[0]) * 1000;
+      $individual_points_array[$timestamp][$user->name] = $points;
+      //
+      $points_array[$uid] = isset($points_array[$uid]) ? $points_array[$uid] += (int) $points : (int) $points;
+      // @todo change this to index by date instead of aq record number. 
+      $aq_array[$group_record_id] = isset($aq_array[$group_record_id]) ? $aq_array[$group_record_id] += (int) $points : (int) $points;
+      // Weird... $array_name[$index]++ doesn't seem to work, but $array_name[$index] += 1 does?
+      $rounds_array[$uid] = (isset($rounds_array[$uid]) ? $rounds_array[$uid] += 1 : 1);
+      // Check to see if his points are zero, meaning this person missed the round.
+      if ($points == 0) {
+        $misses_array[$uid] = isset($misses_array[$uid]) ? $misses_array[$uid] += 1 : 1;
+      }
+      else {
+        // Add users tothe misses array even if they haven't missed so that we have a full list. 
+        // @todo initialize this somewhere so we can remove this else. 
+        $misses_array[$uid] = isset($misses_array[$uid]) ? $misses_array[$uid] : 0;
+      }
+      if (array_key_exists($record->nid, $top_ten)) {
+        $top_ten_array[$points] = $name;
+      }
+      // Record the map number for our stats.
+      $map_number = $group_wrapper->field_aq_map_num->value();
+      $maps_array[$group_record_id] = $map_number;
+      // Record the explored percenage for our dashboards.
+      $percent_explored = $group_wrapper->field_explored_->value();
+      $explored_array[$group_record_id] = array('map' => $map_number, 'percentage' => $percent_explored);
     }
-    else {
-      // Add users tothe misses array even if they haven't missed so that we have a full list. 
-      // @todo initialize this somewhere so we can remove this else. 
-      $misses_array[$uid] = isset($misses_array[$uid]) ? $misses_array[$uid] : 0;
-    }
-    if (array_key_exists($record->nid, $top_ten)) {
-      $top_ten_array[$points] = $name;
-    }
-    // Record the map number for our stats.
-    $map_number = $group_wrapper->field_aq_map_num->value();
-    $maps_array[$group_record_id] = $map_number;
-    // Record the explored percenage for our dashboards.
-    $percent_explored = $group_wrapper->field_explored_->value();
-    $explored_array[$group_record_id] = array('map' => $map_number, 'percentage' => $percent_explored);
   }
   // Create the individual points chart
   mcoc_stats_create_individual_points_chart($form, $individual_points_array);
@@ -101,7 +109,7 @@ function mcoc_stats_create_avg_table(&$form, $users, $points, $rounds) {
   $i = 0;
   $rows = array();
   // Create the header for our table. 
-  $header = array('#', 'Name', 'Average Points');
+  $header = array('#', 'Name', 'Average Points', '# of AQs');
   // Calculate our averages
   foreach($points as $id => $score) {
     // Calculate the average points based on the user ID. 
@@ -119,6 +127,7 @@ function mcoc_stats_create_avg_table(&$form, $users, $points, $rounds) {
       array('data' => $i, 'align' => 'center'),
       array('data' => $users[$id], 'align' => 'center'),
       array('data' => number_format($points[$id], 0), 'align' => 'center'),
+      array('data' => $rounds[$id], 'align' => 'center'),
     );
   }
   // Create the form element for our chart to render in and styles to key off of. 

@@ -11,11 +11,11 @@ include_once 'mcoc_stats.features.inc';
  * Implements hook_menu.
  */
 function mcoc_stats_menu() {
-  $items['mcoc/stats/aq'] = array(
+  $items['mcoc/stats/aq/%'] = array(
     'title' => 'BG2 AQ Stats', 
     'description' => 'Alliance quest stats',
     'page callback' => 'drupal_get_form', 
-    'page arguments' => array('mcoc_stats_aq'),
+    'page arguments' => array('mcoc_stats_aq', 3),
     'access callback' => TRUE,
     'type' => MENU_NORMAL_ITEM,
     'file' => 'includes/mcoc_stats.aq.inc',
@@ -43,6 +43,25 @@ function mcoc_stats_menu() {
     'page arguments' => array('mcoc_mass_upload_form'),
     'access arguments' => array('access administration pages'),
     'file' => 'includes/mcoc_stats.mass-upload-form.inc',
+  );
+
+  $items['admin/config/mcoc-stats'] = array(
+    'title' => 'Marvel Contest of Champions Settings',
+    'description' => 'Settings related to the Marvel Contest of Champions statistics.',
+    'position' => 'left',
+    'weight' => -15, 
+    'access arguments' => array('access administration pages'),
+  );
+
+  $items['admin/config/mcoc-stats/aq-settings'] = array(
+    'title' => 'Alliance Quest Settings',
+    'description' => 'Settings related to the Marvel Contest of Champions alliance quest statistics.',
+    'position' => 'left',
+    'weight' => 15, 
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('mcoc_aq_settings_form'),
+    'access arguments' => array('access administration pages'),
+    'file' => 'includes/mcoc_stats.settings-form-aq.inc',
   );
 
   return $items;
@@ -142,8 +161,12 @@ function mcoc_stats_get_records($type, $top_ten = FALSE, $range = 10, $user = NU
     $query->fieldCondition('field_member', 'target_id', $user);
   }
 
-  $records = $query->execute();
+  if (!is_null($bg)) {
+    $query->fieldCondition('field_bg_', 'value', $bg);
+  }
 
+  $records = $query->execute();
+  ddl($records);
   return $records['node'];
 }
 
