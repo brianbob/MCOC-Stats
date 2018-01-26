@@ -114,6 +114,7 @@ function mcoc_mass_upload_form($form, &$form_state) {
 
 function mcoc_mass_upload_form_submit($form, $form_state) {
   $values = $form_state['values'];
+  $num_bgs = variable_get('mcoc_aq_num_bgs', 3);
 
   $bg_entity = array(
     'type' => 'alliance_aq_record',

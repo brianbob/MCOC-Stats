@@ -83,7 +83,6 @@ function mcoc_stats_aq ($form, &$form_state, $bg_number) {
       $explored_array[$group_record_id] = array('map' => $map_number, 'percentage' => $percent_explored);
     }
   }
-  ddl($top_ten_array, 'tta');
   // Create the individual points chart
   mcoc_stats_create_individual_points_chart($form, $individual_points_array);
   // Create the first round of tables. 
@@ -263,6 +262,7 @@ function mcoc_stats_create_map_numbers_chart(&$form, $maps_array) {
   $map_three = 0;
   $map_four = 0;
   $map_five = 0;
+  $map_six = 0;
   $map_total = 0;
   
   foreach($maps_array as $map_number) {
@@ -282,7 +282,11 @@ function mcoc_stats_create_map_numbers_chart(&$form, $maps_array) {
       case 5:
         $map_five++;
         break;
+      case 6:
+        $map_six++;
+        break;
     }
+
     $map_total++;
   }
 
@@ -312,6 +316,11 @@ function mcoc_stats_create_map_numbers_chart(&$form, $maps_array) {
     'y' => ($map_five / $map_total) * 100,
   );
 
+  $values[] = array(
+    'label' => 'Map 6',
+    'y' => ($map_six / $map_total) * 100,
+  );
+
   // Create our chart
   drupal_add_js(array('mcoc_stats' => array('map_number_data' => $values)), array('type' => 'setting'));
   // Create the form element for our chart to render in and styles to key off of. 
@@ -337,6 +346,8 @@ function mcoc_stats_create_explored_graph(&$form, $maps_array) {
   $map_four_num = 0;
   $map_five_explored = 0;
   $map_five_num = 0;
+  $map_six_explored = 0;
+  $map_six_num = 0;
 
   foreach($maps_array as $map) {
     switch ($map['map']) {
@@ -360,6 +371,10 @@ function mcoc_stats_create_explored_graph(&$form, $maps_array) {
         $map_five_explored += $map['percentage'];
         $map_five_num++;
         break;
+      case 6:
+        $map_six_explored += $map['percentage'];
+        $map_six_num++;
+        break;
     }
   }
   $map_one_explored = empty($map_one_explored) ? 0 : $map_one_explored / $map_one_num;
@@ -367,6 +382,7 @@ function mcoc_stats_create_explored_graph(&$form, $maps_array) {
   $map_three_explored = empty($map_three_explored) ? 0 : $map_three_explored / $map_three_num;
   $map_four_explored = empty($map_four_explored) ? 0 : $map_four_explored / $map_four_num;
   $map_five_explored = empty($map_five_explored) ? 0 : $map_five_explored / $map_five_num;
+  $map_six_explored = empty($map_six_explored) ? 0 : $map_six_explored / $map_six_num;
 
   $values[] = array(
     'y' => $map_one_explored,
@@ -391,6 +407,11 @@ function mcoc_stats_create_explored_graph(&$form, $maps_array) {
   $values[] = array(
     'y' => $map_five_explored,
     'label' => 'Map 5',
+  );
+
+  $values[] = array(
+    'y' => $map_six_explored,
+    'label' => 'Map 6',
   );
   // Create our chart
   drupal_add_js(array('mcoc_stats' => array('explored_data' => $values)), array('type' => 'setting'));
