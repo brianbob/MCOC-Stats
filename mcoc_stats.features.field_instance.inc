@@ -10,7 +10,7 @@
 function mcoc_stats_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-alliance_aq_record-field_aq_day_num'
+  // Exported field_instance: 'node-alliance_aq_record-field_aq_day_num'.
   $field_instances['node-alliance_aq_record-field_aq_day_num'] = array(
     'bundle' => 'alliance_aq_record',
     'default_value' => NULL,
@@ -56,7 +56,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_aq_record-field_aq_map_num'
+  // Exported field_instance: 'node-alliance_aq_record-field_aq_map_num'.
   $field_instances['node-alliance_aq_record-field_aq_map_num'] = array(
     'bundle' => 'alliance_aq_record',
     'default_value' => NULL,
@@ -102,7 +102,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_aq_record-field_bg_'
+  // Exported field_instance: 'node-alliance_aq_record-field_bg_'.
   $field_instances['node-alliance_aq_record-field_bg_'] = array(
     'bundle' => 'alliance_aq_record',
     'default_value' => NULL,
@@ -148,7 +148,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_aq_record-field_boss_defeated'
+  // Exported field_instance: 'node-alliance_aq_record-field_boss_defeated'.
   $field_instances['node-alliance_aq_record-field_boss_defeated'] = array(
     'bundle' => 'alliance_aq_record',
     'default_value' => NULL,
@@ -185,7 +185,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_aq_record-field_date_range'
+  // Exported field_instance: 'node-alliance_aq_record-field_date_range'.
   $field_instances['node-alliance_aq_record-field_date_range'] = array(
     'bundle' => 'alliance_aq_record',
     'deleted' => 0,
@@ -200,6 +200,7 @@ function mcoc_stats_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
         'weight' => 0,
@@ -238,7 +239,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_aq_record-field_explored_'
+  // Exported field_instance: 'node-alliance_aq_record-field_explored_'.
   $field_instances['node-alliance_aq_record-field_explored_'] = array(
     'bundle' => 'alliance_aq_record',
     'default_value' => NULL,
@@ -284,7 +285,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_attack_bonus'
+  // Exported field_instance: 'node-alliance_war_record-field_attack_bonus'.
   $field_instances['node-alliance_war_record-field_attack_bonus'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -330,7 +331,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_attacker_kills'
+  // Exported field_instance: 'node-alliance_war_record-field_attacker_kills'.
   $field_instances['node-alliance_war_record-field_attacker_kills'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -376,7 +377,8 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_battlegroup_clears'
+  // Exported field_instance:
+  // 'node-alliance_war_record-field_battlegroup_clears'.
   $field_instances['node-alliance_war_record-field_battlegroup_clears'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -422,7 +424,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_date_range'
+  // Exported field_instance: 'node-alliance_war_record-field_date_range'.
   $field_instances['node-alliance_war_record-field_date_range'] = array(
     'bundle' => 'alliance_war_record',
     'deleted' => 0,
@@ -437,6 +439,7 @@ function mcoc_stats_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
         'weight' => 13,
@@ -475,7 +478,8 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_defender_diversity'
+  // Exported field_instance:
+  // 'node-alliance_war_record-field_defender_diversity'.
   $field_instances['node-alliance_war_record-field_defender_diversity'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -521,7 +525,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_defender_kills'
+  // Exported field_instance: 'node-alliance_war_record-field_defender_kills'.
   $field_instances['node-alliance_war_record-field_defender_kills'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -567,7 +571,8 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_defenders_remaining'
+  // Exported field_instance:
+  // 'node-alliance_war_record-field_defenders_remaining'.
   $field_instances['node-alliance_war_record-field_defenders_remaining'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -613,7 +618,8 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_enemy_attack_bonus'
+  // Exported field_instance:
+  // 'node-alliance_war_record-field_enemy_attack_bonus'.
   $field_instances['node-alliance_war_record-field_enemy_attack_bonus'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -659,7 +665,8 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_enemy_attacker_kills'
+  // Exported field_instance:
+  // 'node-alliance_war_record-field_enemy_attacker_kills'.
   $field_instances['node-alliance_war_record-field_enemy_attacker_kills'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -705,7 +712,8 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_enemy_battlegroup_clears'
+  // Exported field_instance:
+  // 'node-alliance_war_record-field_enemy_battlegroup_clears'.
   $field_instances['node-alliance_war_record-field_enemy_battlegroup_clears'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -751,7 +759,8 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_enemy_defender_diversity'
+  // Exported field_instance:
+  // 'node-alliance_war_record-field_enemy_defender_diversity'.
   $field_instances['node-alliance_war_record-field_enemy_defender_diversity'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -797,7 +806,8 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_enemy_defender_kills'
+  // Exported field_instance:
+  // 'node-alliance_war_record-field_enemy_defender_kills'.
   $field_instances['node-alliance_war_record-field_enemy_defender_kills'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -843,7 +853,8 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_enemy_defenders_remaining'
+  // Exported field_instance:
+  // 'node-alliance_war_record-field_enemy_defenders_remaining'.
   $field_instances['node-alliance_war_record-field_enemy_defenders_remaining'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -889,7 +900,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_enemy_explored_'
+  // Exported field_instance: 'node-alliance_war_record-field_enemy_explored_'.
   $field_instances['node-alliance_war_record-field_enemy_explored_'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -935,7 +946,8 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_enemy_participants'
+  // Exported field_instance:
+  // 'node-alliance_war_record-field_enemy_participants'.
   $field_instances['node-alliance_war_record-field_enemy_participants'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -981,7 +993,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_enemy_points'
+  // Exported field_instance: 'node-alliance_war_record-field_enemy_points'.
   $field_instances['node-alliance_war_record-field_enemy_points'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -1027,7 +1039,8 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_enemy_rating_change'
+  // Exported field_instance:
+  // 'node-alliance_war_record-field_enemy_rating_change'.
   $field_instances['node-alliance_war_record-field_enemy_rating_change'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -1073,7 +1086,8 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_enemy_war_rating_pre_'
+  // Exported field_instance:
+  // 'node-alliance_war_record-field_enemy_war_rating_pre_'.
   $field_instances['node-alliance_war_record-field_enemy_war_rating_pre_'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -1119,7 +1133,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_explored_'
+  // Exported field_instance: 'node-alliance_war_record-field_explored_'.
   $field_instances['node-alliance_war_record-field_explored_'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -1165,7 +1179,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_mvp_1'
+  // Exported field_instance: 'node-alliance_war_record-field_mvp_1'.
   $field_instances['node-alliance_war_record-field_mvp_1'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -1209,7 +1223,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_mvp_2'
+  // Exported field_instance: 'node-alliance_war_record-field_mvp_2'.
   $field_instances['node-alliance_war_record-field_mvp_2'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -1253,7 +1267,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_mvp_3'
+  // Exported field_instance: 'node-alliance_war_record-field_mvp_3'.
   $field_instances['node-alliance_war_record-field_mvp_3'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -1297,7 +1311,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_participants'
+  // Exported field_instance: 'node-alliance_war_record-field_participants'.
   $field_instances['node-alliance_war_record-field_participants'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -1343,7 +1357,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_points'
+  // Exported field_instance: 'node-alliance_war_record-field_points'.
   $field_instances['node-alliance_war_record-field_points'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -1389,7 +1403,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_rating_change'
+  // Exported field_instance: 'node-alliance_war_record-field_rating_change'.
   $field_instances['node-alliance_war_record-field_rating_change'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -1435,7 +1449,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_victory_'
+  // Exported field_instance: 'node-alliance_war_record-field_victory_'.
   $field_instances['node-alliance_war_record-field_victory_'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -1472,7 +1486,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-alliance_war_record-field_war_rating_pre_'
+  // Exported field_instance: 'node-alliance_war_record-field_war_rating_pre_'.
   $field_instances['node-alliance_war_record-field_war_rating_pre_'] = array(
     'bundle' => 'alliance_war_record',
     'default_value' => NULL,
@@ -1518,7 +1532,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-individual_aq_record-field_aq_record'
+  // Exported field_instance: 'node-individual_aq_record-field_aq_record'.
   $field_instances['node-individual_aq_record-field_aq_record'] = array(
     'bundle' => 'individual_aq_record',
     'default_value' => NULL,
@@ -1562,7 +1576,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-individual_aq_record-field_bg_'
+  // Exported field_instance: 'node-individual_aq_record-field_bg_'.
   $field_instances['node-individual_aq_record-field_bg_'] = array(
     'bundle' => 'individual_aq_record',
     'default_value' => NULL,
@@ -1607,7 +1621,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-individual_aq_record-field_comments'
+  // Exported field_instance: 'node-individual_aq_record-field_comments'.
   $field_instances['node-individual_aq_record-field_comments'] = array(
     'bundle' => 'individual_aq_record',
     'default_value' => NULL,
@@ -1647,7 +1661,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-individual_aq_record-field_items_used'
+  // Exported field_instance: 'node-individual_aq_record-field_items_used'.
   $field_instances['node-individual_aq_record-field_items_used'] = array(
     'bundle' => 'individual_aq_record',
     'default_value' => NULL,
@@ -1693,7 +1707,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-individual_aq_record-field_member'
+  // Exported field_instance: 'node-individual_aq_record-field_member'.
   $field_instances['node-individual_aq_record-field_member'] = array(
     'bundle' => 'individual_aq_record',
     'default_value' => NULL,
@@ -1737,7 +1751,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-individual_aq_record-field_points'
+  // Exported field_instance: 'node-individual_aq_record-field_points'.
   $field_instances['node-individual_aq_record-field_points'] = array(
     'bundle' => 'individual_aq_record',
     'default_value' => NULL,
@@ -1783,7 +1797,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-individual_war_record-field_attacker_kills'
+  // Exported field_instance: 'node-individual_war_record-field_attacker_kills'.
   $field_instances['node-individual_war_record-field_attacker_kills'] = array(
     'bundle' => 'individual_war_record',
     'default_value' => NULL,
@@ -1829,7 +1843,8 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-individual_war_record-field_battlegroup_instance'
+  // Exported field_instance:
+  // 'node-individual_war_record-field_battlegroup_instance'.
   $field_instances['node-individual_war_record-field_battlegroup_instance'] = array(
     'bundle' => 'individual_war_record',
     'default_value' => NULL,
@@ -1873,7 +1888,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-individual_war_record-field_contribution_'
+  // Exported field_instance: 'node-individual_war_record-field_contribution_'.
   $field_instances['node-individual_war_record-field_contribution_'] = array(
     'bundle' => 'individual_war_record',
     'default_value' => NULL,
@@ -1919,7 +1934,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-individual_war_record-field_defender_kills'
+  // Exported field_instance: 'node-individual_war_record-field_defender_kills'.
   $field_instances['node-individual_war_record-field_defender_kills'] = array(
     'bundle' => 'individual_war_record',
     'default_value' => NULL,
@@ -1965,7 +1980,8 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-individual_war_record-field_defender_rating'
+  // Exported field_instance:
+  // 'node-individual_war_record-field_defender_rating'.
   $field_instances['node-individual_war_record-field_defender_rating'] = array(
     'bundle' => 'individual_war_record',
     'default_value' => NULL,
@@ -2011,7 +2027,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-individual_war_record-field_explored_'
+  // Exported field_instance: 'node-individual_war_record-field_explored_'.
   $field_instances['node-individual_war_record-field_explored_'] = array(
     'bundle' => 'individual_war_record',
     'default_value' => NULL,
@@ -2057,7 +2073,7 @@ function mcoc_stats_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-individual_war_record-field_member'
+  // Exported field_instance: 'node-individual_war_record-field_member'.
   $field_instances['node-individual_war_record-field_member'] = array(
     'bundle' => 'individual_war_record',
     'default_value' => NULL,

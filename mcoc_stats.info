@@ -2,15 +2,6 @@ name = MCOC Stats
 description = Provides various stats for Marvel Contest of Champions.
 core = 7.x
 package = mcoc
-
-dependencies[] = views
-
-files[] = js/mcoc_stats.aq.js
-files[] = js/mcoc_stats.aq.js
-files[] = css/mcoc_stats.aq.css
-files[] = css/mcoc_stats.aq.css
-
-
 dependencies[] = date
 dependencies[] = entityreference
 dependencies[] = features
@@ -18,6 +9,7 @@ dependencies[] = list
 dependencies[] = number
 dependencies[] = options
 dependencies[] = text
+dependencies[] = views
 features[features_api][] = api:2
 features[field_base][] = field_aq_day_num
 features[field_base][] = field_aq_map_num
@@ -107,3 +99,7 @@ features[node][] = alliance_aq_record
 features[node][] = alliance_war_record
 features[node][] = individual_aq_record
 features[node][] = individual_war_record
+files[] = js/mcoc_stats.aq.js
+files[] = js/mcoc_stats.aq.js
+files[] = css/mcoc_stats.aq.css
+files[] = css/mcoc_stats.aq.css
