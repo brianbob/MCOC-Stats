@@ -147,6 +147,7 @@ function mcoc_stats_block_view($delta = '') {
 
 /**
  * Get all of the individual AQ records.
+ * Working on moving this to a class. 
  */
 function mcoc_stats_get_records($type, $top_ten = FALSE, $range = 10, $user = NULL, $bg = NULL) {
   $query = new EntityFieldQuery();
@@ -166,7 +167,6 @@ function mcoc_stats_get_records($type, $top_ten = FALSE, $range = 10, $user = NU
   }
 
   $records = $query->execute();
-  ddl($records);
   return $records['node'];
 }
 
