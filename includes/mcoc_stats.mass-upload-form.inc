@@ -1,16 +1,16 @@
 <?php
 
 /**
- * Page callback for the mass upload form. 
+ * Page callback for the mass upload form.
  */
 function mcoc_mass_upload_form($form, &$form_state) {
-  // Attach our CSS       
+  // Attach our CSS
   $path = drupal_get_path('module', 'mcoc_stats') . '/css/mcoc_stats.mass-upload-aq.css';
   $form['#attached']['css'] = array($path);
   $num_bgs = variable_get('mcoc_aq_num_bgs', 3);
 
   $num_members_per_bg = 10;
-  // Load up our users and put them into an array. 
+  // Load up our users and put them into an array.
   $users = entity_load('user');
   $members = array();
   foreach($users as $user) {
@@ -19,15 +19,19 @@ function mcoc_mass_upload_form($form, &$form_state) {
 
   for ($bg=1; $bg <= $num_bgs; $bg++ ) {
     $form["bg-$bg"] = array(
-      '#type' => 'fieldset', 
-      '#title' => t("BG #$bg"), 
-      '#weight' => $bg, 
-      '#collapsible' => TRUE, 
+      '#type' => 'fieldset',
+      '#title' => t("BG #$bg"),
+      '#weight' => $bg,
+      '#collapsible' => TRUE,
       '#collapsed' => FALSE,
       '#tree' => TRUE,
       '#container' => TRUE,
     );
 
+    $form["bg-$bg"]['bg_num'] = array(
+      '#type' => 'textfield',
+      '#title' => 'BG #',
+    );
 
     $form["bg-$bg"]['day'] = array(
       '#type' => 'textfield',
@@ -72,26 +76,26 @@ function mcoc_mass_upload_form($form, &$form_state) {
       '#tree' => TRUE,
     );
 
-    // Create the points form for each member in each bg. 
+    // Create the points form for each member in each bg.
     for ($i=1; $i <= $num_members_per_bg; $i++) {
       // Member select form to be used by our entity reference field.
       $form["bg-$bg"]['row_wrapper'][$i]['member'] = array(
         '#type' => 'select',
         '#title' => "Member $i",
-        '#options' => $members,        
+        '#options' => $members,
       );
-      // Member points.      
+      // Member points.
       $form["bg-$bg"]['row_wrapper'][$i]['points'] = array(
         '#type' => 'textfield',
         '#title' => "Points",
       );
-      // Member points.      
+      // Member points.
       $form["bg-$bg"]['row_wrapper'][$i]['items'] = array(
         '#type' => 'textfield',
         '#title' => "Items Used",
-        '#default_value' => 0, 
+        '#default_value' => 0,
       );
-      // Member points.      
+      // Member points.
       $form["bg-$bg"]['row_wrapper'][$i]['comments'] = array(
         '#type' => 'textfield',
         '#title' => "Comments",
@@ -137,19 +141,19 @@ function mcoc_mass_upload_form_submit($form, $form_state) {
     $nid = mcoc_mass_upload_create_bg_aq_record($values, $bg_entity, $bg);
     // Iterate over each member for each bg and create the individual records.
     foreach ($values["bg-$bg"]['row_wrapper'] as $record) {
-      mcoc_mass_upload_create_individual_aq_record($individual_entity, $record, $nid, $values["bg-$bg"]['date']);
+      mcoc_mass_upload_create_individual_aq_record($individual_entity, $record, $nid, $values["bg-$bg"]['date'], $values["bg-$bg"]['bg_num']);
     }
   }
 }
 
 /**
- *  Create the BG record for a given AQ. 
+ *  Create the BG record for a given AQ.
  */
 function mcoc_mass_upload_create_bg_aq_record($values, $entity, $bg) {
-  // Create the entity and wrap it. 
+  // Create the entity and wrap it.
   $bg_entity = entity_create('node', $entity);
   $bg_wrapper = entity_metadata_wrapper('node', $bg_entity);
-  // Set some variables. 
+  // Set some variables.
   $map = $values["bg-$bg"]['map'];
   $day = $values["bg-$bg"]['day'];
   $start_date = $values["bg-$bg"]['date'];
@@ -162,15 +166,15 @@ function mcoc_mass_upload_create_bg_aq_record($values, $entity, $bg) {
   $bg_wrapper->field_boss_defeated->set($values["bg-$bg"]['boss'][1]);
   $bg_wrapper->field_explored_->set($values["bg-$bg"]['explored']);
   // Identify the battlegroup.
-  $bg_wrapper->field_bg_->set($bg);
-  // Set the start and End date. 
+  $bg_wrapper->field_bg_->set($values["bg-$bg"]['bg_num']);
+  // Set the start and End date.
   $bg_wrapper->field_date_range->set(array(
     'value' => $start_date,
     'value2' => $end_date,
   ));
-  // Set the title to the start date. 
-  $bg_wrapper->title->set("BG$bg AQ Record (Map $map, Day $day) on $start_date");  
-  // Save the wrapper. 
+  // Set the title to the start date.
+  $bg_wrapper->title->set("BG$bg AQ Record (Map $map, Day $day) on $start_date");
+  // Save the wrapper.
   $bg_wrapper->save();
   return $bg_entity->nid;
 }
@@ -178,8 +182,8 @@ function mcoc_mass_upload_create_bg_aq_record($values, $entity, $bg) {
 /**
   *
   */
-function mcoc_mass_upload_create_individual_aq_record($entity, $record, $nid, $date) {
-  // Create the entity and wrap it. 
+function mcoc_mass_upload_create_individual_aq_record($entity, $record, $nid, $date, $bg) {
+  // Create the entity and wrap it.
   $ind_entity = entity_create('node', $entity);
   $ind_wrapper = entity_metadata_wrapper('node', $ind_entity);
   $member = $record['member'];
@@ -191,6 +195,7 @@ function mcoc_mass_upload_create_individual_aq_record($entity, $record, $nid, $d
   $ind_wrapper->field_points->set($record['points']);
   $ind_wrapper->field_items_used->set($record['items']);
   $ind_wrapper->field_comments->set($comments);
+  $ind_wrapper->field_bg_->set($bg);
   // Save the record
   $ind_wrapper->save();
 }
