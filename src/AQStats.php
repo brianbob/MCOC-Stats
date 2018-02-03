@@ -13,6 +13,7 @@ class AQStats {
 	private $records;
 	private $user;
 	private $stats_array;
+  private $form;
 	// Do we need all these still? These should probably be part of stats_array
 	//private $rows;
   //private $user_data;
@@ -37,11 +38,12 @@ class AQStats {
    *  int $user
    *    This should be the uid if loading an individual user, NULL loads all users
    */
-	function __construct($current = TRUE, $bg = 2, $user = FALSE) {
+	function __construct($current = TRUE, $bg = 2, &$form = array(), $user = FALSE) {
 	  $this->current_only = $current;
 	  $this->top_ten_only = $top_ten;
 	  $this->bg = $bg;
 	  $this->stats_array = array();
+    $this->form = $form;
     // If type is an integer, then load that user, otherwise NULL to load all users.
     $this->user = is_int($user) ? $user : NULL;
 	}
@@ -54,7 +56,15 @@ class AQStats {
    *  one calls this function to get the records it needs. To do this I think we should use a lot
    *  of caching so each chart that needs individual records doesn't repeat the query.
    */
-	function queryRecords()) {
+	function queryRecords($type)) {
+    // Setup a cache ID
+    $cid = 'mcoc_stats:node_types:' . $type;
+
+    // If a cached entry exists, return it
+    if ($cached = cache_get($cid)) {
+      return $cached->data;
+    }
+
 	  $query->entityCondition('entity_type', 'node')
 	    ->entityCondition('bundle', $type);
 
@@ -72,7 +82,10 @@ class AQStats {
 	  }
 
 	  $records = $query->execute();
+    // Set the records on our object
 	  $this->records = $records['node'];
+    // And cache it
+    cache_set($cid, $records, 'cache', strtotime('+1 day'));
 	}
 
 
@@ -94,5 +107,9 @@ class AQStats {
     // $this->generateStats($arguments_here);
     // Return form array here.
 	}
+
+  function returnForm() {
+    return $this->form;
+  }
 
 }
