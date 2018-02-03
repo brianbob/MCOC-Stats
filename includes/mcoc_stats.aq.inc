@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Page callback for the AQ stats page. 
+ * Page callback for the AQ stats page.
  */
 function mcoc_stats_aq ($form, &$form_state, $bg_number) {
   // Variables!
@@ -24,7 +24,7 @@ function mcoc_stats_aq ($form, &$form_state, $bg_number) {
   $form['#attached']['js'][] = drupal_get_path('module', 'mcoc_stats') . '/js/mcoc_stats.alliance-aq.js';
   // Get the bg number from the args.
   $bg = isset($bg_number) ? $bg_number : NULL;
-  // Get all our individual aq records. 
+  // Get all our individual aq records.
   $individual_records = mcoc_stats_get_records('individual_aq_record', FALSE, NULL, NULL, $bg);
   $top_ten = mcoc_stats_get_records('individual_aq_record', TRUE, variable_get('mcoc_aq_num_top', 10), NULL, $bg);
   // See if we should filter out all non-current members.
@@ -35,31 +35,31 @@ function mcoc_stats_aq ($form, &$form_state, $bg_number) {
     $individiual_entity = node_load($record->nid);
     // Wrap the individual AQ node.
     $individual_wrapper = entity_metadata_wrapper('node', $individiual_entity);
-    // Get the bg Aq node. 
+    // Get the bg Aq node.
     $group_record_id = $individual_wrapper->field_aq_record->value()->nid;
-    // Wrap the bg Aq node. 
+    // Wrap the bg Aq node.
     $group_wrapper = entity_metadata_wrapper('node', $group_record_id);
     // Load the user associated with the record so we can get their name.
     $user = $individual_wrapper->field_member->value();
-    // Wrap the user. 
+    // Wrap the user.
     $user_wrapper = entity_metadata_wrapper('user', $user);
-    // Save the UID, mostly to save space down below. 
+    // Save the UID, mostly to save space down below.
     $uid = $user->uid;
-    // Check to see first if we're looking for current members only, and if we are if they match. 
+    // Check to see first if we're looking for current members only, and if we are if they match.
     if (($current && $user_wrapper->field_bg_->value() == $individual_wrapper->field_bg_->value()) || !$current) {
       $name = "<a href='/user/$uid'>$user->name</a>";
-      // Get their points so we can average them. 
+      // Get their points so we can average them.
       $points = (int) $individual_wrapper->field_points->value();
-      // Add the username to our list of users. 
+      // Add the username to our list of users.
       $users_array[$user->uid] = $name;
-      // Categorize the individual array by date since that's how the chart wants it. 
+      // Categorize the individual array by date since that's how the chart wants it.
       $date_array = $group_wrapper->field_date_range->value();
       $date_parts = explode( ' ', $date_array['value']);
       $timestamp = strtotime($date_parts[0]) * 1000;
       $individual_points_array[$timestamp][$user->name] = $points;
       //
       $points_array[$uid] = isset($points_array[$uid]) ? $points_array[$uid] += (int) $points : (int) $points;
-      // @todo change this to index by date instead of aq record number. 
+      // @todo change this to index by date instead of aq record number.
       $aq_array[$group_record_id] = isset($aq_array[$group_record_id]) ? $aq_array[$group_record_id] += (int) $points : (int) $points;
       // Weird... $array_name[$index]++ doesn't seem to work, but $array_name[$index] += 1 does?
       $rounds_array[$uid] = (isset($rounds_array[$uid]) ? $rounds_array[$uid] += 1 : 1);
@@ -68,8 +68,8 @@ function mcoc_stats_aq ($form, &$form_state, $bg_number) {
         $misses_array[$uid] = isset($misses_array[$uid]) ? $misses_array[$uid] += 1 : 1;
       }
       else {
-        // Add users tothe misses array even if they haven't missed so that we have a full list. 
-        // @todo initialize this somewhere so we can remove this else. 
+        // Add users tothe misses array even if they haven't missed so that we have a full list.
+        // @todo initialize this somewhere so we can remove this else.
         $misses_array[$uid] = isset($misses_array[$uid]) ? $misses_array[$uid] : 0;
       }
       if (array_key_exists($record->nid, $top_ten)) {
@@ -85,44 +85,44 @@ function mcoc_stats_aq ($form, &$form_state, $bg_number) {
   }
   // Create the individual points chart
   mcoc_stats_create_individual_points_chart($form, $individual_points_array);
-  // Create the first round of tables. 
+  // Create the first round of tables.
   mcoc_stats_create_avg_table($form, $users_array, $points_array, $rounds_array);
   // Create the "top ten" table.
   mcoc_stats_create_top_ten_table($form, $top_ten_array);
   // Create "aq points over time" chart.
-  mcoc_stats_create_group_points_chart($form, $aq_array); 
+  mcoc_stats_create_group_points_chart($form, $aq_array);
   // Map pie chart
   mcoc_stats_create_map_numbers_chart($form, $maps_array);
-  // Create misses table. 
+  // Create misses table.
   mcoc_stats_create_misses_table($form, $users_array, $misses_array);
-  // Create 'explored graph'. 
+  // Create 'explored graph'.
   mcoc_stats_create_explored_graph($form, $explored_array);
 
   return $form;
 }
 
 /**
- * Creates the 'Average points' table. 
+ * Creates the 'Average points' table.
  */
 function mcoc_stats_create_avg_table(&$form, $users, $points, $rounds) {
   // Variables!
   $i = 0;
   $rows = array();
-  // Create the header for our table. 
+  // Create the header for our table.
   $header = array('#', 'Name', 'Average Points', 'AQs on Record');
   // Calculate our averages
   foreach($points as $id => $score) {
-    // Calculate the average points based on the user ID. 
+    // Calculate the average points based on the user ID.
     $points[$id] = $score / $rounds[$id];
   }
 
-  // Sort the array by points. This is why our arrays needed to be individual arrays 
+  // Sort the array by points. This is why our arrays needed to be individual arrays
   // instead of one big array. I had trouble sorting the multi-dimensional arrays :(
   arsort($points);
 
   foreach($points as $id => $score) {
     $i++;
-    // Add the data to our rows array for theme_table() 
+    // Add the data to our rows array for theme_table()
     $rows[] = array(
       array('data' => $i, 'align' => 'center'),
       array('data' => $users[$id], 'align' => 'center'),
@@ -130,7 +130,7 @@ function mcoc_stats_create_avg_table(&$form, $users, $points, $rounds) {
       array('data' => $rounds[$id], 'align' => 'center'),
     );
   }
-  // Create the form element for our chart to render in and styles to key off of. 
+  // Create the form element for our chart to render in and styles to key off of.
   $form['avg'] = array (
     '#prefix' => '<div class="mcoc-table-container left"> <h2>Average Points by Member</h2><div class="mcoc-avg-table mcoc-table">',
     '#markup' => theme('table', array('header' => $header, 'rows' => $rows)),
@@ -139,29 +139,29 @@ function mcoc_stats_create_avg_table(&$form, $users, $points, $rounds) {
 }
 
 /**
- * Creates the 'Misses' table. 
+ * Creates the 'Misses' table.
  */
 function mcoc_stats_create_misses_table(&$form, $users, $misses) {
   // Variables!
   $i = 0;
   $rows = array();
 
-  // Sort the array by points. This is why our arrays needed to be individual arrays 
+  // Sort the array by points. This is why our arrays needed to be individual arrays
   // instead of one big array. I had trouble sorting the multi-dimensional arrays :(
   arsort($misses);
-  // Create the header for our table. 
+  // Create the header for our table.
   $header = array('#', 'Name', '# of Missed AQs');
   // Calculate our stats and create the table
   foreach($misses as $id => $miss) {
     $i++;
-    // Add the data to our rows array for theme_table() 
+    // Add the data to our rows array for theme_table()
     $rows[] = array(
       array('data' => $i, 'align' => 'center'),
       array('data' => $users[$id], 'align' => 'center'),
       array('data' => $miss, 'align' => 'center'),
     );
   }
-  // Create the form element for our chart to render in and styles to key off of. 
+  // Create the form element for our chart to render in and styles to key off of.
   $form['misses'] = array (
     '#prefix' => '<div class="mcoc-table-container" id="misses-table"><h2>Missed AQs by Member</h2><div class="mcoc-misses-table mcoc-table">',
     '#markup' => theme('table', array('header' => $header, 'rows' => $rows)),
@@ -170,10 +170,15 @@ function mcoc_stats_create_misses_table(&$form, $users, $misses) {
 }
 
 /**
- * 
+ *
  */
 function mcoc_stats_create_group_points_chart(&$form, $aq_array) {
-  $values = array();
+  $overall_values = array();
+  $average_values = array();
+  $trendline = array();
+  $total_thusfar = 0;
+  $num_aqs = 0;
+  $total_aqs = count($aq_array);
 
   foreach($aq_array as $aq_id => $aq_points) {
     $node_entity = node_load($aq_id);
@@ -181,15 +186,30 @@ function mcoc_stats_create_group_points_chart(&$form, $aq_array) {
     $date_array = $node_wrapper->field_date_range->value();
     $date_parts = explode( ' ', $date_array['value']);
     $timestamp = strtotime($date_parts[0]) * 1000;
-  
-    $values[] = array(
+    $num_aqs++;
+    $total_thusfar += $aq_points;
+    // Calculate the individual map values.
+    $overall_values[] = array(
       'x' => $timestamp,
       'y' => $aq_points,
     );
+    // Calculate the averages over time. This should show progress over time.
+    $average_points[] = array(
+      'x' => $timestamp,
+      'y' => ($total_thusfar / $num_aqs),
+    );
+    if($num_aqs == 1 || $num_aqs == $total_aqs) {
+        $trendline[] = array(
+        'x' => $timestamp,
+        'y' => ($total_thusfar / $num_aqs),
+      );
+    }
   }
   // Create our chart
-  drupal_add_js(array('mcoc_stats' => array('bg_data' => $values)), array('type' => 'setting'));
-  // Create the form element for our chart to render in and styles to key off of. 
+  drupal_add_js(array('mcoc_stats' => array('bg_overall_data' => $overall_values)), array('type' => 'setting'));
+  drupal_add_js(array('mcoc_stats' => array('bg_average_data' => $average_points)), array('type' => 'setting'));
+  drupal_add_js(array('mcoc_stats' => array('bg_trendline_data' => $trendline)), array('type' => 'setting'));
+  // Create the form element for our chart to render in and styles to key off of.
   $form['bg-points-chart'] = array (
     '#prefix' => '<div class="mcoc-chart-container"> <h2>BG2 Total Points Over Time</h2><div class="mcoc-bg-point-chart mcoc-chart">',
     '#markup' => '<div id="bgPointChartContainer">&nbsp;</div>',
@@ -202,7 +222,7 @@ function mcoc_stats_create_group_points_chart(&$form, $aq_array) {
  */
 function mcoc_stats_create_individual_points_chart(&$form, $individual_points_array) {
   $values = array();
-  
+
   foreach($individual_points_array as $timestamp => $individuals) {
     foreach($individuals as $name => $points) {
       $values[$name][] = array(
@@ -214,7 +234,7 @@ function mcoc_stats_create_individual_points_chart(&$form, $individual_points_ar
 
   // Create our chart
   drupal_add_js(array('mcoc_stats' => array('individual_data' => $values)), array('type' => 'setting'));
-  // Create the form element for our chart to render in and styles to key off of. 
+  // Create the form element for our chart to render in and styles to key off of.
   $form['points-chart'] = array (
     '#prefix' => '<div class="mcoc-chart-container"> <h2>AQ Points by Member</h2> <div class="mcoc-individiual-point-chart mcoc-chart">',
     '#markup' => '<div id="individualPointChartContainer">&nbsp;</div>',
@@ -223,7 +243,7 @@ function mcoc_stats_create_individual_points_chart(&$form, $individual_points_ar
 }
 
 /**
- * Creates the 'Top Ten points' table. 
+ * Creates the 'Top Ten points' table.
  */
 function mcoc_stats_create_top_ten_table(&$form, $top_ten_array) {
   // Variables!
@@ -232,19 +252,19 @@ function mcoc_stats_create_top_ten_table(&$form, $top_ten_array) {
   // Sort the array by points
   krsort($top_ten_array);
 
-  // Create the header for our table. 
+  // Create the header for our table.
   $header = array('#', 'Name', 'Points');
   // Calculate our stats and create the table
   foreach($top_ten_array as $points => $name) {
     $i++;
-    // Add the data to our rows array for theme_table() 
+    // Add the data to our rows array for theme_table()
     $rows[] = array(
       array('data' => $i, 'align' => 'center'),
       array('data' => $name, 'align' => 'center'),
       array('data' => number_format($points, 0), 'align' => 'center'),
     );
   }
-  // Create the form element for our chart to render in and styles to key off of. 
+  // Create the form element for our chart to render in and styles to key off of.
   $form['top-ten'] = array (
     '#prefix' => '<div class="mcoc-table-container"> <h2>Top Scores All Time</h2><div class="mcoc-top-ten-table mcoc-table">',
     '#markup' => theme('table', array('header' => $header, 'rows' => $rows)),
@@ -253,7 +273,7 @@ function mcoc_stats_create_top_ten_table(&$form, $top_ten_array) {
 }
 
 /**
- * 
+ *
  */
 function mcoc_stats_create_map_numbers_chart(&$form, $maps_array) {
   $values = array();
@@ -264,7 +284,7 @@ function mcoc_stats_create_map_numbers_chart(&$form, $maps_array) {
   $map_five = 0;
   $map_six = 0;
   $map_total = 0;
-  
+
   foreach($maps_array as $map_number) {
     switch ($map_number) {
       case 1:
@@ -273,7 +293,7 @@ function mcoc_stats_create_map_numbers_chart(&$form, $maps_array) {
       case 2:
         $map_two++;
         break;
-      case 3: 
+      case 3:
         $map_three++;
         break;
       case 4:
@@ -303,7 +323,7 @@ function mcoc_stats_create_map_numbers_chart(&$form, $maps_array) {
   $values[] = array(
     'label' => 'Map 3',
     'y' => ($map_three / $map_total) * 100,
-    'exploded' => TRUE 
+    'exploded' => TRUE
   );
 
   $values[] = array(
@@ -323,7 +343,7 @@ function mcoc_stats_create_map_numbers_chart(&$form, $maps_array) {
 
   // Create our chart
   drupal_add_js(array('mcoc_stats' => array('map_number_data' => $values)), array('type' => 'setting'));
-  // Create the form element for our chart to render in and styles to key off of. 
+  // Create the form element for our chart to render in and styles to key off of.
   $form['map-number-chart'] = array (
     '#prefix' => '<div class="mcoc-chart-container" id="map-number-pie-chart"> <h2>Map Selection</h2> <div class="mcoc-map-number-chart mcoc-chart">',
     '#markup' => '<div id="mapNumberChartContainer">&nbsp;</div>',
@@ -332,7 +352,7 @@ function mcoc_stats_create_map_numbers_chart(&$form, $maps_array) {
 }
 
 /**
- * 
+ *
  */
 function mcoc_stats_create_explored_graph(&$form, $maps_array) {
   $values = array();
@@ -415,7 +435,7 @@ function mcoc_stats_create_explored_graph(&$form, $maps_array) {
   );
   // Create our chart
   drupal_add_js(array('mcoc_stats' => array('explored_data' => $values)), array('type' => 'setting'));
-  // Create the form element for our chart to render in and styles to key off of. 
+  // Create the form element for our chart to render in and styles to key off of.
   $form['explored-chart'] = array (
     '#prefix' => '<div class="mcoc-chart-container" id="explored-bar-chart"> <h2>Average Exploration % by Map</h2> <div class="mcoc-chart">',
     '#markup' => '<div id="exploredChartContainer">&nbsp;</div>',

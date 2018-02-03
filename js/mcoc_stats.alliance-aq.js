@@ -21,7 +21,7 @@
             type: "line",
             xValueType: "dateTime",
             dataPoints: individual_data[keys[i]],
-            showInLegend: true, 
+            showInLegend: true,
             legendText: keys[i],
           };
         }
@@ -31,7 +31,7 @@
           theme: "light2",
           zoomEnabled: true,
           title: {
-            verticalAlign: "top", 
+            verticalAlign: "top",
             horizontalAlign: "left",
             padding: 15,
             margin: 30
@@ -62,13 +62,15 @@
       }
 
       function create_bg_point_chart() {
-        var bg_data = Drupal.settings.mcoc_stats.bg_data;
+        var bg_overall_data = Drupal.settings.mcoc_stats.bg_overall_data;
+        var bg_average_data = Drupal.settings.mcoc_stats.bg_average_data;
+        var bg_trendline_data = Drupal.settings.mcoc_stats.bg_trendline_data;
         var chart = new CanvasJS.Chart("bgPointChartContainer", {
           animationEnabled: true,
           theme: "light2",
           zoomEnabled: true,
           title: {
-            verticalAlign: "top", 
+            verticalAlign: "top",
             horizontalAlign: "left",
             padding: 15,
             margin: 30
@@ -80,11 +82,27 @@
             valueFormatString: "DD-MMM" ,
             labelAngle: -37
           },
-          data: [{
-            type: "line",
-            xValueType: "dateTime",
-            dataPoints: bg_data
-          }]
+          data: [
+            {
+              type: "line",
+              xValueType: "dateTime",
+              color: "red",
+              dataPoints: bg_overall_data
+            },
+            {
+              type: "line",
+              lineDashType: "dash",
+              xValueType: "dateTime",
+              color: "rgba(100,149,237,.8)",
+              dataPoints: bg_average_data
+            },
+            {
+              type: "line",
+              xValueType: "dateTime",
+              color: "rgba(100,149,237,.8)",
+              dataPoints: bg_trendline_data
+            }
+          ]
         });
         chart.render();
       }
@@ -109,12 +127,12 @@
         var chart = new CanvasJS.Chart("exploredChartContainer", {
           animationEnabled: true,
           theme: "light2", // "light1", "light2", "dark1", "dark2"
-          data: [{        
-            type: "column",  
+          data: [{
+            type: "column",
             dataPoints: explored_data,
           }]
         });
-        chart.render();      
+        chart.render();
       }
 
     }
