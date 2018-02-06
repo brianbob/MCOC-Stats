@@ -39,6 +39,8 @@ class AQStats {
    *    This should be the uid if loading an individual user, NULL loads all users
    */
 	function __construct($current = TRUE, $bg = 2, &$form = array(), $user = FALSE) {
+    // Do we want to set this as a variable here, or use the setting?
+    // $current = variable_get('mcoc_aq_filter_current')['Yes'] === 'Yes';
 	  $this->current_only = $current;
 	  $this->top_ten_only = $top_ten;
 	  $this->bg = $bg;
@@ -72,6 +74,9 @@ class AQStats {
 	  //if($this->$top_ten) {
 	  //  $query->fieldOrderBy('field_points', 'value', 'DESC')->range(0, $range);
 	  //}
+
+    // @TODO: Add a left join here with the user table so we can add a condition for current
+    // members only.
 
 	  if (!is_null($this->$user)) {
 	    $query->fieldCondition('field_member', 'target_id', $user);
