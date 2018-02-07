@@ -16,12 +16,13 @@ function mcoc_stats_aq ($form, &$form_state, $bg_number) {
   $maps_array = array();
   $explored_array = array();
   $individual_points_array = array();
+  $path = drupal_get_path('module', 'mcoc_stats');
 
   // Attach our CSS
-  $form['#attached']['css'] = array(drupal_get_path('module', 'mcoc_stats') . '/css/mcoc_stats.alliance-aq.css');
+  $form['#attached']['css'][] = $path . '/css/mcoc_stats.alliance-aq.css';
   // Attach our JS
-  $form['#attached']['js'][] = drupal_get_path('module', 'mcoc_stats') . '/js/jquery.canvasjs.min.js';
-  $form['#attached']['js'][] = drupal_get_path('module', 'mcoc_stats') . '/js/mcoc_stats.alliance-aq.js';
+  $form['#attached']['js'][] = $path . '/js/jquery.canvasjs.min.js';
+  $form['#attached']['js'][] = $path . '/js/mcoc_stats.alliance-aq.js';
   // Get the bg number from the args.
   $bg = isset($bg_number) ? $bg_number : NULL;
   // Get all our individual aq records.
