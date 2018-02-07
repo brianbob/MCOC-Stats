@@ -1,8 +1,5 @@
 <?php
 
-// https://stackoverflow.com/a/3443811
-require_once 'Stats.php';
-
 class WarStats extends Stats {
 
   function __construct(&$form = array()) {
@@ -18,58 +15,35 @@ class WarStats extends Stats {
   }
 
   /**
-   *  Queries for the records needed by our stats class.
+   * The idea here is that this should be called once per object. All the needed stats will be
+   * calculated and stored in the stats variable.
    */
-  function queryRecords($type = 'alliance_war_record') {
-    // Setup a cache ID
-    $cid = 'mcoc_stats:node_types:' . $type;
-    // If a cached entry exists, return it
-    if ($cached = cache_get($cid)) {
-      //ddl($cached, 'cache');
-      return $cached->data;
+  function calculateStats() {
+    // Get all of our alliance war records to start with.
+    $alliance_records = $this->getRecords('alliance_war_record');
+    // Iterate over each of our records.
+    foreach ($alliance_records as $alliance_record_id => $alliance_record) {
+      // Load the Node for this record.
+      $alliance_record_node = node_load($alliance_record_id);
+      // Get all the individual records associated with this node.
+      $individual_records = $this->getRecords('individual_war_record', $alliance_record_id);
+      // Iterate over each of the individual records assoicated with the group record.
+      foreach ($individual_records as $individual_record_id => $individual_record) {
+        // Load the Node for this record.
+        $individual_record_node = node_load($individual_record_id);
+
+        // Caluclate individual stats here
+      }
+      // Calculate alliance stats here.
+      //$this->stats['pot'] = array(x => timestamp, y => value);
     }
-    $query = new EntityFieldQuery();
-    $query->entityCondition('entity_type', 'node')
-      ->entityCondition('bundle', $type);
-
-    // @TODO move this to the charts function. Maybe it should be it's own function?
-    //if($this->$top_ten) {
-    //  $query->fieldOrderBy('field_points', 'value', 'DESC')->range(0, $range);
-    //}
-
-    // @TODO: Add a left join here with the user table so we can add a condition for current
-    // members only.
-
-    if (!is_null($this->user)) {
-      $query->fieldCondition('field_member', 'target_id', $user);
-    }
-
-    // By default we'll get the data for all BGs, but if specified get only the data for the
-    // requested BG.
-    if (!is_null($this->bg)) {
-      $query->fieldCondition('field_bg_', 'value', $bg);
-    }
-
-    $records = $query->execute();
-    // Set the records on our object
-    $this->records = $records['node'];
-    // And cache it
-    cache_set($cid, $records['node'], 'cache', strtotime('+1 day'));
   }
 
   function createPOTChart($individual = FALSE) {
-    ddl($this->records, 'records');
 
-  $this->form['test'] = array (
-    '#markup' => 'Test',
-  );
-
-
-  //  foreach ($this->records as $record) {
+    //foreach ($this->stats['TODO'] as $record) {
 
     //}
-    // $this->queryRecords($arguments_here);
-    // $this->generateStats($arguments_here);
   }
 
   // Standard 'Missed <event>' table.
