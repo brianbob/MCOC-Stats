@@ -25,9 +25,10 @@ class WarStats extends Stats {
     $cid = 'mcoc_stats:node_types:' . $type;
     // If a cached entry exists, return it
     if ($cached = cache_get($cid)) {
+      //ddl($cached, 'cache');
       return $cached->data;
     }
-
+    $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
       ->entityCondition('bundle', $type);
 
@@ -39,13 +40,13 @@ class WarStats extends Stats {
     // @TODO: Add a left join here with the user table so we can add a condition for current
     // members only.
 
-    if (!is_null($this->$user)) {
+    if (!is_null($this->user)) {
       $query->fieldCondition('field_member', 'target_id', $user);
     }
 
     // By default we'll get the data for all BGs, but if specified get only the data for the
     // requested BG.
-    if (!is_null($this->$bg)) {
+    if (!is_null($this->bg)) {
       $query->fieldCondition('field_bg_', 'value', $bg);
     }
 
@@ -53,14 +54,20 @@ class WarStats extends Stats {
     // Set the records on our object
     $this->records = $records['node'];
     // And cache it
-    cache_set($cid, $records, 'cache', strtotime('+1 day'));
+    cache_set($cid, $records['node'], 'cache', strtotime('+1 day'));
   }
 
   function createPOTChart($individual = FALSE) {
     ddl($this->records, 'records');
-    foreach ($this->records as $record) {
 
-    }
+  $this->form['test'] = array (
+    '#markup' => 'Test',
+  );
+
+
+  //  foreach ($this->records as $record) {
+
+    //}
     // $this->queryRecords($arguments_here);
     // $this->generateStats($arguments_here);
   }

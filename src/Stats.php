@@ -2,13 +2,13 @@
 
 abstract class Stats {
 
-  private $bg;
-  private $query;
-  private $current_only;
-  private $records;
-  private $user;
-  private $stats_array;
-  private $form;
+  protected $bg;
+  protected $query;
+  protected $current_only;
+  protected $records;
+  protected $user;
+  protected $stats_array;
+  protected $form;
 
   function __construct(&$form = array()) {
     // For right now lets set this to false by default. It can be turned on by calling setCurrent()
@@ -20,7 +20,7 @@ abstract class Stats {
     // Initialize our stats array
     $this->stats_array = array();
     // Save the form so we can add our charts later.
-    $this->form = $form;
+    $this->form = &$form;
   }
 
   /**
