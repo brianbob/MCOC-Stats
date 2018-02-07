@@ -2,7 +2,7 @@
 
 /**
  * @todo
- *  - Pull the aq-specific functions out of .module and add it to it's own .inc file. 
+ *  - Pull the aq-specific functions out of .module and add it to it's own .inc file.
  */
 
 include_once 'mcoc_stats.features.inc';
@@ -12,34 +12,44 @@ include_once 'mcoc_stats.features.inc';
  */
 function mcoc_stats_menu() {
   $items['mcoc/stats/aq/%'] = array(
-    'title' => 'BG2 AQ Stats', 
+    'title' => 'AQ Stats',
     'description' => 'Alliance quest stats',
-    'page callback' => 'drupal_get_form', 
+    'page callback' => 'drupal_get_form',
     'page arguments' => array('mcoc_stats_aq', 3),
     'access callback' => TRUE,
     'type' => MENU_NORMAL_ITEM,
     'file' => 'includes/mcoc_stats.aq.inc',
   );
 
+  $items['mcoc/stats/war'] = array(
+    'title' => 'War Stats',
+    'description' => 'Alliance war stats',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('mcoc_stats_war'),
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'includes/mcoc_stats.war.inc',
+  );
+
   $items['admin/mcoc'] = array(
-    'title' => 'MCOC', 
+    'title' => 'MCOC',
     'description' => 'mcoc sub-menu',
     'access arguments' => array('access administration pages'),
   );
-  
+
   $items['admin/mcoc/aq-upload-form'] = array(
-    'title' => 'AQ Upload Form', 
+    'title' => 'AQ Upload Form',
     'description' => 'Allows for uploading multiple bg and individual aq records.',
-    'page callback' => 'drupal_get_form', 
+    'page callback' => 'drupal_get_form',
     'page arguments' => array('mcoc_mass_upload_form'),
     'access arguments' => array('access administration pages'),
     'file' => 'includes/mcoc_stats.mass-upload-form.inc',
   );
 
   $items['admin/mcoc/war-upload-form'] = array(
-    'title' => 'War Upload Form', 
+    'title' => 'War Upload Form',
     'description' => 'Allows for uploading multiple bg and individual aq records.',
-    'page callback' => 'drupal_get_form', 
+    'page callback' => 'drupal_get_form',
     'page arguments' => array('mcoc_mass_upload_form'),
     'access arguments' => array('access administration pages'),
     'file' => 'includes/mcoc_stats.mass-upload-form.inc',
@@ -49,7 +59,7 @@ function mcoc_stats_menu() {
     'title' => 'Marvel Contest of Champions Settings',
     'description' => 'Settings related to the Marvel Contest of Champions statistics.',
     'position' => 'left',
-    'weight' => -15, 
+    'weight' => -15,
     'access arguments' => array('access administration pages'),
   );
 
@@ -57,7 +67,7 @@ function mcoc_stats_menu() {
     'title' => 'Alliance Quest Settings',
     'description' => 'Settings related to the Marvel Contest of Champions alliance quest statistics.',
     'position' => 'left',
-    'weight' => 15, 
+    'weight' => 15,
     'page callback' => 'drupal_get_form',
     'page arguments' => array('mcoc_aq_settings_form'),
     'access arguments' => array('access administration pages'),
@@ -70,7 +80,7 @@ function mcoc_stats_menu() {
 /**
  *  Implements hook_block_info()
  */
-function mcoc_stats_block_info() {    
+function mcoc_stats_block_info() {
   $blocks['individual_stats_aq'] = array(
     'info' => t('Individual AQ Stats'),
   );
@@ -94,24 +104,24 @@ function mcoc_stats_block_view($delta = '') {
       $user = user_load($user_id);
       $records = mcoc_stats_get_records('individual_aq_record', FALSE, NULL, $user_id) ;
       $individual_points_array = array();
-    
+
       foreach($records as $record) {
-        // Load each record so we can pull the stats from it. 
+        // Load each record so we can pull the stats from it.
         $individiual_entity = node_load($record->nid);
         // Wrap the individual AQ node.
         $individual_wrapper = entity_metadata_wrapper('node', $individiual_entity);
-        // Get the points scored.  
+        // Get the points scored.
         $points = $individual_wrapper->field_points->value();
         $group_record_id = $individual_wrapper->field_aq_record->value()->nid;
-        // Wrap the bg Aq node. 
+        // Wrap the bg Aq node.
         $group_wrapper = entity_metadata_wrapper('node', $group_record_id);
-        // Categorize the individual array by date since that's how the chart wants it. 
+        // Categorize the individual array by date since that's how the chart wants it.
         $date_array = $group_wrapper->field_date_range->value();
         $date_parts = explode( ' ', $date_array['value']);
         $timestamp = strtotime($date_parts[0]) * 1000;
         $individual_points_array[$timestamp][$user->name] = $points;
       }  $values = array();
-  
+
       foreach($individual_points_array as $timestamp => $individuals) {
         foreach($individuals as $name => $points) {
           $values[$name][] = array(
@@ -147,7 +157,7 @@ function mcoc_stats_block_view($delta = '') {
 
 /**
  * Get all of the individual AQ records.
- * Working on moving this to a class. 
+ * Working on moving this to a class.
  */
 function mcoc_stats_get_records($type, $top_ten = FALSE, $range = 10, $user = NULL, $bg = NULL) {
   $query = new EntityFieldQuery();
