@@ -1,5 +1,8 @@
 <?php
 
+// https://stackoverflow.com/a/3443811
+require_once 'Stats.php';
+
 class WarStats extends Stats {
 
   function __construct(&$form = array()) {
@@ -17,7 +20,7 @@ class WarStats extends Stats {
   /**
    *  Queries for the records needed by our stats class.
    */
-  function queryRecords($type = 'alliance_war_record')) {
+  function queryRecords($type = 'alliance_war_record') {
     // Setup a cache ID
     $cid = 'mcoc_stats:node_types:' . $type;
     // If a cached entry exists, return it
@@ -60,11 +63,6 @@ class WarStats extends Stats {
     }
     // $this->queryRecords($arguments_here);
     // $this->generateStats($arguments_here);
-  }
-
-  // Queries for the records needed by our stats class.
-  public function queryRecords($type) {
-
   }
 
   // Standard 'Missed <event>' table.

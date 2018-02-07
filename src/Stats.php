@@ -1,6 +1,6 @@
 <?php
 
-abstract class WarStats {
+abstract class Stats {
 
   private $bg;
   private $query;
