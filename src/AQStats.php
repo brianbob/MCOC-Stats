@@ -97,7 +97,7 @@ class AQStats {
   /**
    *  Iterate over $this->records and fill out $this->stats_array.
    */
-	function generateStats() {
+	function generatePoints() {
     foreach ($this->records as $record) {
       // @TODO calculate stuff here.
     }
@@ -105,16 +105,11 @@ class AQStats {
 
 
   /**
-   *  Create a chart. Return a form array for insertion into #markup.
+   *  IP
    */
-	function createChart($chart) {
+	function createPointsOverTime($chart) {
     // $this->queryRecords($arguments_here);
     // $this->generateStats($arguments_here);
     // Return form array here.
 	}
-
-  function returnForm() {
-    return $this->form;
-  }
-
 }
