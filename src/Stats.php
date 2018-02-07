@@ -44,24 +44,13 @@ abstract class WarStats {
     $this->user = $curent;
   }
 
-  /**
-   *  Queries for the records needed by our stats class.
-   */
+  // Queries for the records needed by our stats class.
   abstract protected function queryRecords($type);
 
-  /**
-   *  I think this is too general. This might need to be rolled into a specific chart function.
-   */
-  function calculateStats() {
-    foreach ($this->records as $record) {
-      // @TODO calculate stuff here.
-    }
-  }
+  // Standard Points over time chart.
+  abstract protected function createPOTChart();
 
-  function createPointsOverTimeChart($individual = FALSE) {
-    // $this->queryRecords($arguments_here);
-    // $this->generateStats($arguments_here);
-    // Return form array here.
-  }
+  // Standard 'Missed <event>' table.
+  abstract protected function createMissedTable();
 
 }
