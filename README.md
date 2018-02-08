@@ -25,8 +25,14 @@ This is a side/"for-fun" project. It is far from perfect, and there are things i
 * [x] Export the content types as features.
 * [X] Add trendline and average to alliance total aq points.
 * [ ] Add additional stats to user page. (average points, average items used, missed bgs, etc.)
+* [ ] Add war stats to individual user page. 
 * [ ] Add support for multiple BGs and create multiple dashboards, one for each BG
 * [ ] Add support for filtering by current members of each bg.
 * [ ] Create a 'total alliance' dashboard.
-* [ ] Add support for war stats?
+* [X] Add support for war stats
+* [ ] Add mass upload form for war stats
+* [ ] Create war stats alliance dashboard
+* [ ] Create war stats bg dashboards
 * [ ] Refactor the individual stats into classes? (The dashboard individual chart and the /user/% chart are almost identical. CODE DUPLICATION IS BAD)
+* [ ] Add support for crystal stats. 
+* [ ] Use chosen for select lists. 
