@@ -3,7 +3,7 @@
 /**
  * Page callback for the mass upload form.
  */
-function mcoc_mass_upload_form($form, &$form_state) {
+function mcoc_aq_upload_form($form, &$form_state) {
   // Attach our CSS
   $path = drupal_get_path('module', 'mcoc_stats') . '/css/mcoc_stats.mass-upload-aq.css';
   $form['#attached']['css'] = array($path);
@@ -116,7 +116,7 @@ function mcoc_mass_upload_form($form, &$form_state) {
   return $form;
 }
 
-function mcoc_mass_upload_form_submit($form, $form_state) {
+function mcoc_aq_upload_form_submit($form, $form_state) {
   $values = $form_state['values'];
   $num_bgs = variable_get('mcoc_aq_num_bgs', 3);
 

@@ -1,0 +1,30 @@
+div.form-item input,
+div.form-item label {
+  display: inline-block;
+  width: 275px;
+  padding-left: 5px;
+}
+
+div.fieldset-wrapper div.form-item {
+  display: inline;
+}
+
+div.fieldset-wrapper div.form-item input {
+  display: inline-block;
+  width: 50px;
+  padding-left: 5px;
+}
+
+div.fieldset-wrapper div.form-item label {
+  display: inline-block;
+  width: 150px;
+  padding-left: 5px;
+}
+
+.clearall {
+  clear: both;
+}
+
+#mcoc-war-upload-form div.description {
+  display: none;
+}

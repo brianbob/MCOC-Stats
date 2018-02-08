@@ -41,18 +41,18 @@ function mcoc_stats_menu() {
     'title' => 'AQ Upload Form',
     'description' => 'Allows for uploading multiple bg and individual aq records.',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('mcoc_mass_upload_form'),
+    'page arguments' => array('mcoc_aq_upload_form'),
     'access arguments' => array('access administration pages'),
-    'file' => 'includes/mcoc_stats.mass-upload-form.inc',
+    'file' => 'includes/mcoc_stats.aq-upload-form.inc',
   );
 
   $items['admin/mcoc/war-upload-form'] = array(
     'title' => 'War Upload Form',
-    'description' => 'Allows for uploading multiple bg and individual aq records.',
+    'description' => 'Allows for uploading multiple bg and individual war records.',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('mcoc_mass_upload_form'),
+    'page arguments' => array('mcoc_war_upload_form'),
     'access arguments' => array('access administration pages'),
-    'file' => 'includes/mcoc_stats.mass-upload-form.inc',
+    'file' => 'includes/mcoc_stats.war-upload-form.inc',
   );
 
   $items['admin/config/mcoc-stats'] = array(
