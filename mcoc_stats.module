@@ -21,6 +21,16 @@ function mcoc_stats_menu() {
     'file' => 'includes/mcoc_stats.aq.inc',
   );
 
+  $items['mcoc/home'] = array(
+    'title' => 'Home',
+    'description' => 'Provides a homepage containing links to the mcoc content.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('mcoc_stats_home'),
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'includes/mcoc_stats.home.inc',
+  );
+
   $items['mcoc/stats/war'] = array(
     'title' => 'War Stats',
     'description' => 'Alliance war stats',
