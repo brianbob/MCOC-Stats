@@ -84,14 +84,14 @@ function mcoc_stats_aq ($form, &$form_state, $bg_number) {
       $explored_array[$group_record_id] = array('map' => $map_number, 'percentage' => $percent_explored);
     }
   }
-  // Create the individual points chart
-  mcoc_stats_create_individual_points_chart($form, $individual_points_array);
+  // Create "aq points over time" chart.
+  mcoc_stats_create_group_points_chart($form, $aq_array);
   // Create the first round of tables.
   mcoc_stats_create_avg_table($form, $users_array, $points_array, $rounds_array);
   // Create the "top ten" table.
   mcoc_stats_create_top_ten_table($form, $top_ten_array);
-  // Create "aq points over time" chart.
-  mcoc_stats_create_group_points_chart($form, $aq_array);
+  // Create the individual points chart
+  mcoc_stats_create_individual_points_chart($form, $individual_points_array);
   // Map pie chart
   mcoc_stats_create_map_numbers_chart($form, $maps_array);
   // Create misses table.
