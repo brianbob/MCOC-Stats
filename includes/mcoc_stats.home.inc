@@ -1,6 +1,8 @@
 <?php
 
-function mcoc_stats_home(&$form, $form_state) {
+function mcoc_stats_home($form, $form_state) {
+
+  $form['#attached']['css'][] = drupal_get_path('module', 'mcoc_stats') . '/css/mcoc_stats.home.css';
 
   $form['war-bg1'] = array(
     '#markup' =>   l(t('War Stats - BG1'), 'mcoc/stats/war/1', array('attributes' => array('class' => 'square bg war'))),
