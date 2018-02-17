@@ -159,7 +159,7 @@ function mcoc_mass_upload_create_bg_aq_record($values, $entity, $bg) {
   $start_date = $values["bg-$bg"]['date'];
   // The end date is always 24 hours after the start date. We don't track
   // minutes or hours so this should work out nicely.
-  $end_date = date('Y-m-d', strtotime($start_date. ' + 1 days'));;
+  $end_date = date('Y-m-d', strtotime($start_date. ' + 1 days'));
   // Set all of our values on the wrapper
   $bg_wrapper->field_aq_day_num->set($day);
   $bg_wrapper->field_aq_map_num->set($map);
