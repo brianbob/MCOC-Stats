@@ -30,10 +30,12 @@ This is a side/"for-fun" project. It is far from perfect, and there are things i
 * [ ] Add support for filtering by current members of each bg.
 * [ ] Create a 'total alliance' dashboard.
 * [X] Add support for war stats
-* [ ] Add mass upload form for war stats
+* [X] Add mass upload form for war stats
+* [ ] Test upload form for war stats
 * [ ] Create war stats alliance dashboard
 * [ ] Create war stats bg dashboards
 * [ ] Refactor the individual stats into classes.
 * [ ] Add support for crystal stats.
 * [ ] Use chosen for select lists.
 * [X] Create a homepage.
+* [ ] Re-export features
