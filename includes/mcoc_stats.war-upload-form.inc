@@ -35,7 +35,7 @@ function mcoc_war_upload_form($form, &$form_state) {
     '#title' => 'Our Pre-War Rating',
   );
 
-  $form['enemy-rating-post'] = array(
+  $form['enemy-rating-pre'] = array(
     '#type' => 'textfield',
     '#title' => 'Enemy Pre-War Rating',
   );
@@ -179,11 +179,47 @@ function mcoc_war_upload_form($form, &$form_state) {
       '#container' => TRUE,
     );
 
-    $form["bg-$bg"]['bg_num'] = array(
-      '#type' => 'textfield',
-      '#title' => 'BG #',
+
+    $form["bg-$bg"]['boss'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Boss Defeated?',
     );
-    
+
+    $form["bg-$bg"]['explored'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Explored',
+    );
+
+    $form["bg-$bg"]['attack-bonus'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Attack Bonus',
+    );
+
+    $form["bg-$bg"]['defenders-remaining'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Defenders Remaining',
+    );
+
+    $form["bg-$bg"]['defender-diversity'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Defender Diversity',
+    );
+
+    $form["bg-$bg"]['attacker-kills'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Attacker Kills',
+    );
+
+    $form["bg-$bg"]['defender-kills'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Defender Kills`',
+    );
+
+    $form["bg-$bg"]['participants'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Participants',
+    );
+
     // Formatting help.
     $form["bg-$bg"]['clearall'] = array(
       '#markup' => '<div class="clearall">&nbsp;</div>',
@@ -204,31 +240,41 @@ function mcoc_war_upload_form($form, &$form_state) {
         '#title' => "Member $i",
         '#options' => $members,
       );
-      
+
       $form["bg-$bg"]['row_wrapper'][$i]['contribution'] = array(
         '#type' => 'textfield',
         '#title' => "Contribution %",
       );
-      
+
       $form["bg-$bg"]['row_wrapper'][$i]['explored'] = array(
         '#type' => 'textfield',
         '#title' => "Explored %",
         '#default_value' => 0,
       );
-      
+
       $form["bg-$bg"]['row_wrapper'][$i]['defender-kills'] = array(
         '#type' => 'textfield',
         '#title' => "Defender Kills",
       );
-      
+
       $form["bg-$bg"]['row_wrapper'][$i]['attacker-kills'] = array(
         '#type' => 'textfield',
         '#title' => "Attacker Kills",
       );
-      
+
       $form["bg-$bg"]['row_wrapper'][$i]['defender-rating'] = array(
         '#type' => 'textfield',
         '#title' => "Defender Rating",
+      );
+
+      $form["bg-$bg"]['row_wrapper'][$i]['items'] = array(
+        '#type' => 'textfield',
+        '#title' => "Items Used",
+      );
+
+      $form["bg-$bg"]['row_wrapper'][$i]['comments'] = array(
+        '#type' => 'textfield',
+        '#title' => "Comments",
       );
       // Formatting help.
       $form["bg-$bg"]['row_wrapper'][$i]['clearall'] = array(
@@ -246,90 +292,153 @@ function mcoc_war_upload_form($form, &$form_state) {
   return $form;
 }
 
-function mcoc_mass_upload_form_submit($form, $form_state) {
+function mcoc_war_upload_form_submit($form, $form_state) {
   $values = $form_state['values'];
   $num_bgs = variable_get('mcoc_war_num_bgs', 3);
 
-  $bg_entity = array(
-    'type' => 'alliance_aq_record',
-    'uid' => 1,
-    'status' => 1,
-    'comment' => 0,
-    'promote' => 0,
-  );
-
   $individual_entity = array(
-    'type' => 'individual_aq_record',
-    'uid' => 1,
+    'type' => 'individual_war_record',
+    'uid' => $user->uid,
     'status' => 1,
     'comment' => 0,
     'promote' => 0,
   );
-
+  // Create the alliance records
+  $ar_id = mcoc_war_upload_create_alliance_war_record($values);
   // Look at each one of our battlegroups.
   for ($bg=1; $bg <= $num_bgs; $bg++) {
-    $nid = mcoc_mass_upload_create_bg_war_record($values, $bg_entity, $bg);
     // Iterate over each member for each bg and create the individual records.
+    $bg_id = mcoc_mass_upload_create_bg_war_record($values, $ar_id, $bg);
     foreach ($values["bg-$bg"]['row_wrapper'] as $record) {
-      mcoc_mass_upload_create_individual_war_record($individual_entity, $record, $nid, $values["bg-$bg"]['date'], $values["bg-$bg"]['bg_num']);
+      mcoc_mass_upload_create_individual_war_record($bg_id, $record, $values);
     }
   }
 }
 
 /**
- *  Create the BG record for a given AQ.
+ *  Create the Alliance record for a given war.
  */
-function mcoc_war_upload_create_bg_war_record($values, $entity, $bg) {
-  /*
+function mcoc_war_upload_create_alliance_war_record($values) {
   // Create the entity and wrap it.
-  $bg_entity = entity_create('node', $entity);
-  $bg_wrapper = entity_metadata_wrapper('node', $bg_entity);
+  global $user;
+  $entity = array(
+    'type' => 'alliance_war_record',
+    'uid' => $user->uid,
+    'status' => 1,
+    'comment' => 0,
+    'promote' => 0,
+  );
+  $entity = entity_create('node', $entity);
+  $wrapper = entity_metadata_wrapper('node', $entity);
   // Set some variables.
-  $map = $values["bg-$bg"]['map'];
-  $day = $values["bg-$bg"]['day'];
-  $start_date = $values["bg-$bg"]['date'];
-  // The end date is always 24 hours after the start date. We don't track
-  // minutes or hours so this should work out nicely.
-  $end_date = date('Y-m-d', strtotime($start_date. ' + 1 days'));;
+  $opponent = $values['opponent'];
+  $start_date = $values['date'];
   // Set all of our values on the wrapper
-  $bg_wrapper->field_aq_day_num->set($day);
-  $bg_wrapper->field_aq_map_num->set($map);
-  $bg_wrapper->field_boss_defeated->set($values["bg-$bg"]['boss'][1]);
-  $bg_wrapper->field_explored_->set($values["bg-$bg"]['explored']);
-  // Identify the battlegroup.
-  $bg_wrapper->field_bg_->set($values["bg-$bg"]['bg_num']);
+  $wrapper->title->set("Alliance War Record vs $opponent on $start_date");
+  $wrapper->field_victory_->set($values['victory']);
+  $wrapper->field_war_rating_pre_->set($values['our-rating-pre']);
+  $wrapper->field_points->set($values['our-points']);
+  $wrapper->field_rating_change->set($values['our-rating-change']);
+  $wrapper->field_enemy_war_rating_pre_->set($values['enemy-rating-pre']);
+  $wrapper->field_enemy_points->set($values['enemy-points']);
+  $wrapper->field_enemy_rating_change->set($values['enemy-rating-change']);
+  $wrapper->field_battlegroup_clears->set($values['our-battlegroup-clears']);
+  $wrapper->field_explored_->set($values['our-explored']);
+  $wrapper->field_attack_bonus->set($values['our-attack-bonus']);
+  $wrapper->field_defender_kills->set($values['our-defender-kills']);
+  $wrapper->field_participants->set($values['our-participants']);
+  $wrapper->field_mvp_1->set($values['mvp-1']);
+  $wrapper->field_mvp_2->set($values['mvp-2']);
+  $wrapper->field_mvp_3->set($values['mvp-3']);
+  $wrapper->field_enemy_battlegroup_clears->set($values['enemy-battlegroup-clears']);
+  $wrapper->field_enemy_explored_->set($values['enemy-explored']);
+  $wrapper->field_enemy_attack_bonus->set($values['enemy-attack-bonus']);
+  $wrapper->field_enemy_defenders_remaining->set($values['enemy-defenders-remaining']);
+  $wrapper->field_defenders_remaining->set($values['our-defenders-remaining']);
+  $wrapper->field_enemy_defender_diversity->set($values['enemy-defender-diversity']);
+  $wrapper->field_defender_diversity->set($values['our-defender-diversity']);
+  $wrapper->field_enemy_attacker_kills->set($values['enemy-attacker-kills']);
+  $wrapper->field_attacker_kills->set($values['our-attacker-kills']);
+  $wrapper->field_enemy_defender_kills->set($values['enemy-defender-kills']);
+  $wrapper->field_enemy_participants->set($values['enemy-participants']);
   // Set the start and End date.
-  $bg_wrapper->field_date_range->set(array(
+  // The end date is always 48 hours after the start date (1 day for placement, 1 day for attack).
+  $end_date = date('Y-m-d', strtotime($start_date. ' + 2 days'));
+  $wrapper->field_date_range->set(array(
     'value' => $start_date,
     'value2' => $end_date,
   ));
-  // Set the title to the start date.
-  $bg_wrapper->title->set("BG$bg AQ Record (Map $map, Day $day) on $start_date");
   // Save the wrapper.
-  $bg_wrapper->save();
-  return $bg_entity->nid;
-  */
+  $wrapper->save();
+  return $entity->nid;
+
 }
 
 /**
   *
   */
-function mcoc_mass_upload_create_individual_war_record($entity, $record, $nid, $date, $bg) {
-  /*
+function mcoc_mass_upload_create_bg_war_record($values, $nid, $bg) {
   // Create the entity and wrap it.
-  $ind_entity = entity_create('node', $entity);
-  $ind_wrapper = entity_metadata_wrapper('node', $ind_entity);
+  global $user;
+  $entity = array(
+    'type' => 'battlegroup_war_record',
+    'uid' => $user->uid,
+    'status' => 1,
+    'comment' => 0,
+    'promote' => 0,
+  );
+  $entity = entity_create('node', $entity);
+  $wrapper = entity_metadata_wrapper('node', $entity);
+  $opponent = $values['opponent'];
+  $start_date = $values['date'];
+  // Set the values.
+  $wrapper->title->set("Battlegroup War record for BG #$bg vs $opponent on $start_date");
+  $wrapper->field_war->set($nid);
+  $wrapper->field_bg_->set($bg);
+  $wrapper->field_boss_defeated->set($values['bg-$bg']['boss']);
+  $wrapper->field_explored_->set($values['bg-$bg']['explored']);
+  $wrapper->field_attack_bonus->set($values['bg-$bg']['attack-bonus']);
+  $wrapper->field_defenders_remaining->set($values['bg-$bg']['defenders-remaining']);
+  $wrapper->field_defender_diversity->set($values['bg-$bg']['defender-diversity']);
+  $wrapper->field_attacker_kills->set($values['bg-$bg']['attacker-kills']);
+  $wrapper->field_defender_kills->set($values['bg-$bg']['defender-kills']);
+  $wrapper->field_participants->set($values['bg-$bg']['participants']);
+  // Save the record
+  $wrapper->save();
+}
+
+
+/**
+  *
+  */
+function mcoc_mass_upload_create_individual_war_record($nid, $record, $values) {
+  // Create the entity and wrap it.
+  global $user;
+  $entity = array(
+    'type' => 'individual_war_record',
+    'uid' => $user->uid,
+    'status' => 1,
+    'comment' => 0,
+    'promote' => 0,
+  );
+  $entity = entity_create('node', $entity);
+  $wrapper = entity_metadata_wrapper('node', $entity);
+  $opponent = $values['opponent'];
+  $start_date = $values['date'];
+
   $member = $record['member'];
   $comments = isset($record['comments']) ? $record['comments'] : '';
   // Set the values.
-  $ind_wrapper->title->set("Individual AQ record for member $member on $date");
-  $ind_wrapper->field_aq_record->set($nid);
-  $ind_wrapper->field_member->set($member);
-  $ind_wrapper->field_points->set($record['points']);
-  $ind_wrapper->field_items_used->set($record['items']);
-  $ind_wrapper->field_comments->set($comments);
-  $ind_wrapper->field_bg_->set($bg);
+  $wrapper->title->set("Individual War record for member #$member vs $opponent on $start_date");
+  $wrapper->field_battlegroup_instance->set($nid);
+  $wrapper->field_member->set($member);
+  $wrapper->field_items_used->set($record['items']);
+  $wrapper->field_comments->set($comments);
+  $wrapper->field_contribution_->set($record['contribution']);
+  $wrapper->field_explored_->set($record['explored']);
+  $wrapper->field_defender_kills->set($record['defender-kills']);
+  $wrapper->field_attacker_kills->set($record['attacker-kills']);
+  $wrapper->field_defender_rating->set($record['defender-rating']);
   // Save the record
-  $ind_wrapper->save();
-  */
+  $wrapper->save();
 }
