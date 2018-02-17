@@ -75,13 +75,24 @@ function mcoc_stats_menu() {
 
   $items['admin/config/mcoc-stats/aq-settings'] = array(
     'title' => 'Alliance Quest Settings',
-    'description' => 'Settings related to the Marvel Contest of Champions alliance quest statistics.',
+    'description' => 'Settings related to the MCOC alliance quest statistics.',
     'position' => 'left',
     'weight' => 15,
     'page callback' => 'drupal_get_form',
     'page arguments' => array('mcoc_aq_settings_form'),
     'access arguments' => array('access administration pages'),
     'file' => 'includes/mcoc_stats.settings-form-aq.inc',
+  );
+
+  $items['admin/config/mcoc-stats/war-settings'] = array(
+    'title' => 'Alliance War Settings',
+    'description' => 'Settings related to the Marvel Contest of Champions war statistics.',
+    'position' => 'left',
+    'weight' => 4,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('mcoc_war_settings_form'),
+    'access arguments' => array('access administration pages'),
+    'file' => 'includes/mcoc_stats.settings-form-war.inc',
   );
 
   return $items;
