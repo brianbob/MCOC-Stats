@@ -33,7 +33,7 @@ This is a side/"for-fun" project. It is far from perfect, and there are things i
 * [ ] Add mass upload form for war stats
 * [ ] Create war stats alliance dashboard
 * [ ] Create war stats bg dashboards
-* [ ] Refactor the individual stats into classes? (The dashboard individual chart and the /user/% chart are almost identical. CODE DUPLICATION IS BAD)
+* [ ] Refactor the individual stats into classes.
 * [ ] Add support for crystal stats.
 * [ ] Use chosen for select lists.
 * [X] Create a homepage.
