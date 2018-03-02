@@ -295,6 +295,7 @@ function mcoc_war_upload_form($form, &$form_state) {
 function mcoc_war_upload_form_submit($form, $form_state) {
   $values = $form_state['values'];
   $num_bgs = variable_get('mcoc_war_num_bgs', 3);
+  global $user;
 
   $individual_entity = array(
     'type' => 'individual_war_record',
@@ -395,14 +396,14 @@ function mcoc_mass_upload_create_bg_war_record($values, $nid, $bg) {
   $wrapper->title->set("Battlegroup War record for BG #$bg vs $opponent on $start_date");
   $wrapper->field_war->set($nid);
   $wrapper->field_bg_->set($bg);
-  $wrapper->field_boss_defeated->set($values['bg-$bg']['boss']);
-  $wrapper->field_explored_->set($values['bg-$bg']['explored']);
-  $wrapper->field_attack_bonus->set($values['bg-$bg']['attack-bonus']);
-  $wrapper->field_defenders_remaining->set($values['bg-$bg']['defenders-remaining']);
-  $wrapper->field_defender_diversity->set($values['bg-$bg']['defender-diversity']);
-  $wrapper->field_attacker_kills->set($values['bg-$bg']['attacker-kills']);
-  $wrapper->field_defender_kills->set($values['bg-$bg']['defender-kills']);
-  $wrapper->field_participants->set($values['bg-$bg']['participants']);
+  $wrapper->field_boss_defeated->set($values["bg-$bg"]['boss']);
+  $wrapper->field_explored_->set($values["bg-$bg"]['explored']);
+  $wrapper->field_attack_bonus->set($values["bg-$bg"]['attack-bonus']);
+  $wrapper->field_defenders_remaining->set($values["bg-$bg"]['defenders-remaining']);
+  $wrapper->field_defender_diversity->set($values["bg-$bg"]['defender-diversity']);
+  $wrapper->field_attacker_kills->set($values["bg-$bg"]['attacker-kills']);
+  $wrapper->field_defender_kills->set($values["bg-$bg"]['defender-kills']);
+  $wrapper->field_participants->set($values["bg-$bg"]['participants']);
   // Save the record
   $wrapper->save();
 }
