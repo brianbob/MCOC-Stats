@@ -27,7 +27,8 @@ function mcoc_stats_aq ($form, &$form_state, $bg_number) {
   $bg = isset($bg_number) ? $bg_number : NULL;
   // Get all our individual aq records.
   $individual_records = mcoc_stats_get_records('individual_aq_record', FALSE, NULL, NULL, $bg);
-  $top_ten = mcoc_stats_get_records('individual_aq_record', TRUE, variable_get('mcoc_aq_num_top', 10), NULL, $bg);
+  //$num_top = variable_get('mcoc_aq_num_top', 10);
+  //$top_ten = mcoc_stats_get_records('individual_aq_record', TRUE, $num_top, NULL, $bg);
   // See if we should filter out all non-current members.
   $current = variable_get('mcoc_aq_filter_current')['Yes'] === 'Yes';
   // Iterate over the records.
@@ -73,9 +74,9 @@ function mcoc_stats_aq ($form, &$form_state, $bg_number) {
         // @todo initialize this somewhere so we can remove this else.
         $misses_array[$uid] = isset($misses_array[$uid]) ? $misses_array[$uid] : 0;
       }
-      if (array_key_exists($record->nid, $top_ten)) {
-        $top_ten_array[$points] = $name;
-      }
+      //if (array_key_exists($record->nid, $top_ten)) {
+      $top_ten_array[$points] = $name;
+      //}
       // Record the map number for our stats.
       $map_number = $group_wrapper->field_aq_map_num->value();
       $maps_array[$group_record_id] = $map_number;
@@ -245,19 +246,23 @@ function mcoc_stats_create_individual_points_chart(&$form, $individual_points_ar
 
 /**
  * Creates the 'Top Ten points' table.
+ *
+ * @todo REFACTOR ME
  */
 function mcoc_stats_create_top_ten_table(&$form, $top_ten_array) {
   // Variables!
   $i = 0;
   $rows = array();
+  $num_top = variable_get('mcoc_aq_num_top', 10);
   // Sort the array by points
   krsort($top_ten_array);
-
   // Create the header for our table.
   $header = array('#', 'Name', 'Points');
   // Calculate our stats and create the table
   foreach($top_ten_array as $points => $name) {
-    $i++;
+    if ($i++ >= $num_top) {
+      continue;
+    }
     // Add the data to our rows array for theme_table()
     $rows[] = array(
       array('data' => $i, 'align' => 'center'),
