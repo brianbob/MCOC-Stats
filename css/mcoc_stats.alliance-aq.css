@@ -1,6 +1,6 @@
 .mcoc-table {
   width: 100%;
-  border: 1px solid #cccccc;	
+  border: 1px solid #cccccc;
   box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
               0 1px 18px 0 rgba(0, 0, 0, 0.12),
               0 3px 5px -1px rgba(0, 0, 0, 0.2);
@@ -11,7 +11,7 @@
 .mcoc-chart {
   height: 425px;
   width: 100%;
-  border: 1px solid #cccccc;	
+  border: 1px solid #cccccc;
   box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
               0 1px 18px 0 rgba(0, 0, 0, 0.12),
               0 3px 5px -1px rgba(0, 0, 0, 0.2);
@@ -82,8 +82,8 @@
 }
 
 /* Portrait and Landscape */
-@media only screen 
-  and (min-device-width: 320px) 
+@media only screen
+  and (min-device-width: 320px)
   and (max-device-width: 736px) {
     .mcoc-chart-container,
     .mcoc-table-container {
@@ -101,4 +101,8 @@
 
 div#main .block {
   background: none;
+}
+
+div.mcoc-misses-table {
+  height: 425px;
 }
