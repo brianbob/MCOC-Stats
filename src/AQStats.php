@@ -92,24 +92,4 @@ class AQStats {
     // And cache it
     cache_set($cid, $records, 'cache', strtotime('+1 day'));
 	}
-
-
-  /**
-   *  Iterate over $this->records and fill out $this->stats_array.
-   */
-	function generatePoints() {
-    foreach ($this->records as $record) {
-      // @TODO calculate stuff here.
-    }
-	}
-
-
-  /**
-   *  IP
-   */
-	function createPointsOverTime($chart) {
-    // $this->queryRecords($arguments_here);
-    // $this->generateStats($arguments_here);
-    // Return form array here.
-	}
 }
