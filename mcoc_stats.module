@@ -102,12 +102,44 @@ function mcoc_stats_menu() {
  *  Implements hook_block_info()
  */
 function mcoc_stats_block_info() {
-  $blocks['individual_stats_aq'] = array(
-    'info' => t('Individual AQ Stats'),
+  $blocks['member_aq_points'] = array(
+    'info' => t('Individual AQ Points'),
   );
 
-  $blocks['individual_stats_war'] = array(
-    'info' => t('Individual War Stats'),
+  $blocks['member_war_points'] = array(
+    'info' => t('Individual War Points'),
+  );
+
+  $blocks['battlegroup_points_over_time'] = array(
+    'info' => t('Battlegroup Points Over Time'),
+  );
+
+  $blocks['average_member_points'] = array(
+    'info' => t('Average Points by Member'),
+  );
+
+  $blocks['member_top_points'] = array(
+    'info' => t('Top Points (Member)'),
+  );
+
+  $blocks['all_member_aq_points'] = array(
+    'info' => t('AQ Points by Member'),
+  );
+
+  $blocks['all_member_war_points'] = array(
+    'info' => t('War Points by Member'),
+  );
+
+  $blocks['all_member_missed_aqs'] = array(
+    'info' => t('Missed AQs by Member'),
+  );
+
+  $blocks['aq_map_selection'] = array(
+    'info' => t('AQ Map Selection'),
+  );
+
+  $blocks['aq_map_completion'] = array(
+    'info' => t('AQ Map Completion'),
   );
 
   return $blocks;
@@ -120,7 +152,7 @@ function mcoc_stats_block_view($delta = '') {
   $block = array();
   // The $delta parameter tells us which block is being requested.
   switch ($delta) {
-    case 'individual_stats_aq':
+    case 'member_aq_points':
       $user_id = arg(1);
       $user = user_load($user_id);
       $records = mcoc_stats_get_records('individual_aq_record', FALSE, NULL, $user_id) ;
@@ -169,7 +201,23 @@ function mcoc_stats_block_view($delta = '') {
       );
 
       break;
-    case 'individual_stats_war':
+    case 'member_war_points':
+      break;
+    case 'battlegroup_points_over_time':
+      break;
+    case 'average_member_points':
+      break;
+    case 'member_top_points':
+      break;
+    case 'all_member_aq_points':
+      break;
+    case 'all_member_war_points':
+      break;
+    case 'all_member_missed_aqs':
+      break;
+    case 'aq_map_selection':
+      break;
+    case 'aq_map_completion':
       break;
    }
 
