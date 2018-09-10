@@ -153,9 +153,13 @@ function mcoc_stats_block_view($delta = '') {
   // The $delta parameter tells us which block is being requested.
   switch ($delta) {
     case 'member_aq_points':
-      $user_id = arg(1);
-      $user = user_load($user_id);
-      $records = mcoc_stats_get_records('individual_aq_record', FALSE, NULL, $user_id) ;
+      // Since this is for an individual user, get the current logged in user.
+      global $user;
+      $stats = new AQStats();
+      $stats->setUser($user);
+      $stats->setBg();
+      $records = $stats->getRecords('individual_aq_record');
+      // Should the lines below go in the class? Need to evaluate the code.
       $individual_points_array = array();
 
       foreach($records as $record) {
@@ -173,7 +177,8 @@ function mcoc_stats_block_view($delta = '') {
         $date_parts = explode( ' ', $date_array['value']);
         $timestamp = strtotime($date_parts[0]) * 1000;
         $individual_points_array[$timestamp][$user->name] = $points;
-      }  $values = array();
+      }
+      $values = array();
 
       foreach($individual_points_array as $timestamp => $individuals) {
         foreach($individuals as $name => $points) {
@@ -224,28 +229,5 @@ function mcoc_stats_block_view($delta = '') {
   return $block;
 }
 
-/**
- * Get all of the individual AQ records.
- * Working on moving this to a class.
- */
-function mcoc_stats_get_records($type, $top_ten = FALSE, $range = 10, $user = NULL, $bg = NULL) {
-  $query = new EntityFieldQuery();
-  $query->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', $type);
 
-  if($top_ten) {
-    $query->fieldOrderBy('field_points', 'value', 'DESC')->range(0, $range);
-  }
-
-  if (!is_null($user)) {
-    $query->fieldCondition('field_member', 'target_id', $user);
-  }
-
-  if (!is_null($bg)) {
-    $query->fieldCondition('field_bg_', 'value', $bg);
-  }
-
-  $records = $query->execute();
-  return $records['node'];
-}
 

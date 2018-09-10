@@ -3,6 +3,7 @@
 abstract class Stats {
 
   private $bg;
+  private $user;
   private $current_only;
   protected $stats;
   protected $form;
@@ -37,19 +38,59 @@ abstract class Stats {
   }
 
   /**
-   *  Set the stats to only display information for a specific user.
+   *  Setter for the battlegroup.
    */
-  public function setUser($bg) {
-    $this->bg = $bg;
+  public function setBg($bg) {
+    if (isset($bg) && is_numeric($bg)) {
+      $this->bg = $bg;
+    }
+
+    // @TODO get the bg from the user. THis should be set on their profile.
   }
 
   /**
    *  Set the stats to only display information for a specific user.
+   *
+   * @param object $user
+   *   The Drupal $user object.
    */
-  public function setBg($user) {
-    $this->user = $curent;
+  public function setUser($user) {
+    $this->user = $user;
+
+  /**
+   * Get all of the individual AQ records.
+   * Working on moving this to a class.
+   */
+  public function getRecords($type, $top_ten = FALSE, $range = 10) {
+    // If a cached entry exists, return it
+    $cid = 'mcoc_stats:node_types:' . $type;
+    if ($cached = cache_get($cid)) {
+      return $cached->data;
+    }
+
+    // Otherwise query for our data.
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', $type);
+
+    if($top_ten) {
+      $query->fieldOrderBy('field_points', 'value', 'DESC')->range(0, $range);
+    }
+
+    if (!is_null($this->user)) {
+      $query->fieldCondition('field_member', 'target_id', $this->user);
+    }
+
+    if (!is_null($this->bg)) {
+      $query->fieldCondition('field_bg_', 'value', $this->bg);
+    }
+
+    // Execute the query....
+    $records = $query->execute();
+    // ...and cache the result.
+    cache_set($cid, $records['node'], 'cache', strtotime('+1 day'));
+
+    return $records['node'];
   }
 
-
-
-}
+} // End of Class
